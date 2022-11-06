@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# cmake and c++ output directories
+/build
+/out
+
+# IDE(e.g. neovim, vscode) extra directories
+/.vscode
+/.nvim
