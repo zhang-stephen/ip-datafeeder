@@ -38,6 +38,8 @@
 # IDE(e.g. neovim, vscode) extra directories
 /.vscode
 /.nvim
+/.cache
+.clangd
 
 # others
 *.diff
