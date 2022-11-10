@@ -1,0 +1,5 @@
+#pragma once
+
+#cmakedefine PLATFORM_WINDOWS
+
+// EOF
