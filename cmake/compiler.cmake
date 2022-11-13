@@ -13,14 +13,14 @@ target_compile_options(
     INTERFACE
         -Wall
         -Werror
-        $<IF:$<BOOL:$<CONFIG:DEBUG>>,-g -O2,-O3>
+        $<$<CONFIG:DEBUG>:-O2>
 )
 
 target_include_directories(
     compiler_conf
     INTERFACE
-        ${PROJECT_SOURCE_DIR}/src/common
         ${PROJECT_BINARY_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src/common
 )
 
 # EOF
