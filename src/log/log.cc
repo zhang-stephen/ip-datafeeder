@@ -8,9 +8,7 @@
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/support/date_time.hpp>
-#include <boost/log/utility/manipulators/to_log.hpp>
 #include <boost/log/utility/setup/formatter_parser.hpp>
-#include <boost/move/core.hpp>
 #include <thread>
 
 namespace datafeeder
@@ -21,6 +19,8 @@ namespace logging = boost::log;
 namespace attrs   = logging::attributes;
 namespace expr    = logging::expressions;
 struct severity_tag;
+
+BOOST_LOG_ATTRIBUTE_KEYWORD(_severity, "Severity", Severity);
 
 // Interface class for std::thread::id
 class std_current_thread_id : public logging::attribute
@@ -65,7 +65,7 @@ void logger::init()
 
     boost::shared_ptr<std::ostream> _stream { &std::clog, boost::null_deleter() };
     _sink->locked_backend()->add_stream(_stream);
-    _sink->locked_backend()->auto_flush(); // FIXME: seems not work
+    _sink->locked_backend()->auto_flush();
 
     auto _formatter
         = expr::stream << '[' << expr::format_date_time<boost::posix_time::ptime>("Timestamp", "%H:%M:%S.%f") << ']'
@@ -77,12 +77,8 @@ void logger::init()
     _core->add_global_attribute("Timestamp", attrs::local_clock());
     _core->add_global_attribute("ThreadId", std_current_thread_id());
 
-    // TODO: add more attributes and formatters for debugging
-    if constexpr (is_build_for_debug()) {}
-
+    _sink->set_filter(_severity >= (is_build_for_debug() ? Severity::DBG : Severity::WRN));
     _sink->set_formatter(_formatter << ':' << _log_field_seperator << expr::smessage);
-
-
 }
 } // namespace datafeeder
 

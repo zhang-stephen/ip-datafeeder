@@ -21,9 +21,7 @@ int main(int c, char** v)
 
     t1.join();
     t2.join();
-
-    LOG_FLUSH();
-
+    
     return 0;
 }
 
