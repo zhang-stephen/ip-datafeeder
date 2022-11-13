@@ -41,4 +41,25 @@ I want to make it as a general-purpose tool, with LAN interface. And more featur
 
 ### Implementation
 
-not cleared for now, but I will push code as soon as I can.
+#### Logger
+
+This logger is implemented by `boost::log` v2.
+
+### Usage
+
+Pre-Requisites:
+
+- Boost 1.71.0+
+- GCC/LLVM with C++20 Support, e.g.:
+    - gcc 10.0+
+    - clang 12.0.0+
+- cmake 3.20+
+
+Using [msys2](https://www.msys2.org/) to install all of pre-requisites is recommended if you are using Windows 10/11.
+
+Then build this repo following these steps:
+
+1. make a new directory, e.g. `build`,
+2. run `cmake -S ./ -B build` to generate the building configuration, `Ninja` or `Unix Makefiles` is supported,
+3. run `cmake --build build` to build the executable binary, `debug.exe` for windows and `debug` for unix-like systems,
+4. run `./build/debug[.exe]` to run this demo.
