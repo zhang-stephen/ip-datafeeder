@@ -39,7 +39,6 @@
 /.vscode
 /.nvim
 /.cache
-.clangd
 
 # others
 *.diff

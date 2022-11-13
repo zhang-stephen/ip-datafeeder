@@ -7,4 +7,6 @@ configure_file(
     NEWLINE_STYLE LF
 )
 
+add_subdirectory(log)
+
 # EOF

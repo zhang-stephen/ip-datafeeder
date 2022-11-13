@@ -28,8 +28,9 @@ add_executable(debug main.cc)
 
 target_link_libraries(
     debug
-    PUBLIC
+    PRIVATE
         compiler_conf
+        logging
 )
 
 # EOF
