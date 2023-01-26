@@ -1,0 +1,35 @@
+---
+Language: Cpp
+BasedOnStyle: WebKit
+
+# user-defined details
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignConsecutiveBitFields: Consecutive
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeConceptDeclarations: Always
+BreakBeforeTernaryOperators: true
+BreakStringLiterals: true
+BreakConstructorInitializers: BeforeComma
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+EmptyLineBeforeAccessModifier: Always
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+IncludeBlocks: Regroup
+IndentCaseBlocks: true
+Language: Cpp
+NamespaceIndentation: None
+PointerAlignment: Left
+ReferenceAlignment: Left
+SpaceInEmptyBlock: false
+SpaceBeforeCaseColon: false
+UseTab: Never
+UseCRLF: false
