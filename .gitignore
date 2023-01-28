@@ -39,6 +39,7 @@
 /.vscode
 /.nvim
 /.cache
+compile_commands.json
 
 # others
 *.diff
