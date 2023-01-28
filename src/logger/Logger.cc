@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace datafeeder::logger
+namespace ipdf::logger
 {
 std::shared_ptr<spdlog::logger> g_ipdfLogger;
 
@@ -15,6 +15,6 @@ void setupSpdLog()
 
     // new patterns...
 }
-} // namespace datafeeder::logger
+} // namespace ipdf::logger
 
 // EOF

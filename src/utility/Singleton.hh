@@ -1,7 +1,7 @@
 // UTILITY: Meyers' Singleton
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-namespace datafeeder::utility
+namespace ipdf::utility
 {
 template <typename T>
 class Singleton
@@ -21,6 +21,6 @@ private:
     Singleton(const Singleton&)            = delete;
     Singleton& operator=(const Singleton&) = delete;
 };
-} // namespace datafeeder::utility
+} // namespace ipdf::utility
 
 // EOF

@@ -14,7 +14,6 @@ target_include_directories(
     logger
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE
         ${${SPDLOG_PACKAGE_NAME}_INCLUDE_DIR}
 )
 

@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <string>
 
-namespace datafeeder
+namespace ipdf
 {
 // TODO: for unicode support in the future(ASCII only for now)
 using string = std::string;

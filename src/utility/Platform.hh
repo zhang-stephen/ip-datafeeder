@@ -6,7 +6,7 @@
 
 #include "Defs.hh"
 
-namespace datafeeder::utility
+namespace ipdf::utility
 {
 inline constexpr TargetPlatform platform()
 {
@@ -41,7 +41,7 @@ inline constexpr bool isLinux() { return platform() == TargetPlatform::LINUX; }
 inline constexpr bool isWin32() { return isWin32Msvc() || isWin32Msys(); }
 inline constexpr bool isArm64() { return architecture() == TargetArch::ARM64; }
 inline constexpr bool isAmd64() { return architecture() == TargetArch::AMD64; }
-} // namespace datafeeder::utility
+} // namespace ipdf::utility
 
 #endif // __IP_DATAFEEDER_UTILITY_PLATFORM_HH
 
