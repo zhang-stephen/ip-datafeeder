@@ -1,6 +1,7 @@
 # ** EXPERIMENTAL **
 # TRY to find fmtlib installed from homebrew
-# STL format is not supported completely in LLVM 15
+# STL format is not supported completely in LLVM 15.
+# This will be deprecated if STL format were supported completely by GCC/LLVM/MSVC.
 # Assumptions:
 #   - Release only
 #   - PkgConfig is available
