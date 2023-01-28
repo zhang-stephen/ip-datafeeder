@@ -1,3 +1,6 @@
+# Internal Lib: utility
+# Copyright (c) Stephen Zhang 2023. All Right Reserved.
+
 add_library(utility INTERFACE)
 
 target_include_directories(
