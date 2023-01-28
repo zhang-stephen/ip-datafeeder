@@ -1,6 +1,9 @@
 // common definitions for ip-datafeeder
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
+#ifndef __IP_DATAFEEDER_COMMON_DEFS_HH
+#define __IP_DATAFEEDER_COMMON_DEFS_HH
+
 #include <cstdint>
 #include <string>
 
@@ -26,5 +29,7 @@ enum class TargetArch : uint8_t
     UNKNOWN,
 };
 }
+
+#endif // __IP_DATAFEEDER_COMMON_DEFS_HH
 
 // EOF
