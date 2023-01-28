@@ -34,7 +34,8 @@ if(USE_BREW_LLVM)
     target_compile_options(
         compiler
         INTERFACE
-            -Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++
+            # linker input unused
+            # -Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++
     )
 endif()
 

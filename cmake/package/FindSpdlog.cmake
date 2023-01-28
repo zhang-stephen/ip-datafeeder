@@ -5,7 +5,6 @@
 #   - PkgConfig is available
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-find_package(PkgConfig)
 include(FindPackageHandleStandardArgs)
 
 set(SPDLOG_PACKAGE_NAME spdlog)
