@@ -1,28 +1,27 @@
-# Logger module for ip-datafeeder
-# A wrapper and some initialization for spdlog
+# Internal Lib: json(a simple implementation of json parser)
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(logger STATIC)
+add_library(json STATIC)
 
 target_sources(
-    logger
+    json
     PRIVATE
-        Logger.cc
+        Serializer.cc
 )
 
 target_include_directories(
-    logger
+    json
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${${SPDLOG_PACKAGE_NAME}_INCLUDE_DIR}
 )
 
 target_link_libraries(
-    logger
+    json
     PRIVATE
         compiler
+        common
+        logger
         utility
-        ${${FMT_PACKAGE_NAME}_LIBRARY}
 )
 
 # EOF

@@ -24,6 +24,6 @@ find_package(fmt 9.1.0 REQUIRED)
 find_package(GTest 1.13.0 REQUIRED)
 
 add_subdirectory(src)  # source files
-# add_subdirectory(test) # UT/MT/Others
+add_subdirectory(test) # UT/MT/Others
 
 # EOF

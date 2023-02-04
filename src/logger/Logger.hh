@@ -5,8 +5,6 @@
 #ifndef __IPDF_LOGGER_HH
 #define __IPDF_LOGGER_HH
 
-#include "Defs.hh"
-
 #include <memory>
 #include <spdlog/spdlog.h>
 
