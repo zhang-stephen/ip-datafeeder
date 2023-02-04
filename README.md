@@ -42,3 +42,25 @@ I want to make it as a general-purpose tool, with LAN interface. And more featur
 ### Implementation
 
 not cleared for now, but I will push code as soon as I can.
+
+### Build
+
+#### Mac OS Ventura(Apple Silicon)
+
+*The prototype is being built on Mac OS with M1 pro.*
+Use [homebrew](https://brew.sh) to install dependencies.
+
+```bash
+brew install pkg-config googletest fmt spdlog cmake
+```
+
+And `fmt` is replied by `spdlog`. Then create a folder, e.g. `build`, to store output of CMake.
+
+Use following command to build all targets(under the root of the repo):
+
+```bash
+cmake -B build -S ./ # configure the project
+cmake --build build  # build all targets
+```
+
+And the executable file could be found as `build/src/ipdf` and `build/src/ipdf_test`.

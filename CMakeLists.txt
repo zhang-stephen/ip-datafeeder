@@ -6,7 +6,7 @@
 #   - Mac OS 13 aarch64
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.23)
 
 # includes
 include(cmake/options.cmake)
