@@ -1,8 +1,7 @@
 #include "Logger.hh"
 
-#include <spdlog/sinks/stdout_sinks.h>
-
 #include <memory>
+#include <spdlog/sinks/stdout_sinks.h>
 
 namespace ipdf::logger
 {

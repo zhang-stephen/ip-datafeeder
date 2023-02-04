@@ -10,6 +10,7 @@ AlignConsecutiveBitFields: Consecutive
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortLoopsOnASingleLine: true
 AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false

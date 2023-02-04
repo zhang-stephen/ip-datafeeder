@@ -1,8 +1,8 @@
 // common definitions for ip-datafeeder
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IP_DATAFEEDER_COMMON_DEFS_HH
-#define __IP_DATAFEEDER_COMMON_DEFS_HH
+#ifndef __IPDF_COMMON_DEFS_HH
+#define __IPDF_COMMON_DEFS_HH
 
 #include <cstdint>
 #include <string>
@@ -11,6 +11,7 @@ namespace ipdf
 {
 // TODO: for unicode support in the future(ASCII only for now)
 using string = std::string;
+using string_view = std::string_view;
 
 // platform definitions
 enum class TargetPlatform : uint8_t
@@ -30,6 +31,6 @@ enum class TargetArch : uint8_t
 };
 }
 
-#endif // __IP_DATAFEEDER_COMMON_DEFS_HH
+#endif // __IPDF_COMMON_DEFS_HH
 
 // EOF
