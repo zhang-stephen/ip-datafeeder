@@ -32,8 +32,8 @@
 *.app
 
 # cmake and c++ output directories
-/build
-/out
+/build*
+/out*
 
 # IDE(e.g. neovim, vscode) extra directories
 /.vscode

@@ -31,7 +31,8 @@ enum class TokenType : uint8_t
 class Token final
 {
 public:
-    Token(std::string token, size_t line, size_t column, TokenType type)
+    // NOTE: constexpr std::string is supported in C++20
+    constexpr Token(std::string token, size_t line, size_t column, TokenType type)
         : line_(line)
         , column_(column)
         , token_(token)

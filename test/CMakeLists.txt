@@ -3,26 +3,26 @@
 # to make difference with internal libraries from src/.
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-set(IPDF_TEST_PREFIX "gt")
+include(CTest)
 
-add_subdirectory(json)
-
-add_executable(ipdf_test)
+set(IPDF_TEST_POSTFIX "ut")
+add_library(ipdf_ut_entry STATIC)
 
 target_sources(
-    ipdf_test
+    ipdf_ut_entry
     PRIVATE
         TestMain.cc
 )
 
 target_link_libraries(
-    ipdf_test
-    PRIVATE
+    ipdf_ut_entry
+    PUBLIC
         compiler
+        common
         logger
-        ${IPDF_TEST_PREFIX}_json
-        GTest::GTest
-        GTest::Main
+        utility
 )
+
+add_subdirectory(json)
 
 # EOF

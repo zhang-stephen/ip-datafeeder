@@ -1,20 +1,29 @@
 # GTest for ipdf::json
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(${IPDF_TEST_PREFIX}_json STATIC)
+set(UT_MODULE_NAME json_${IPDF_TEST_POSTFIX})
+
+message(STATUS "building ut -> ${UT_MODULE_NAME}")
+
+add_executable(${UT_MODULE_NAME})
 
 target_sources(
-    ${IPDF_TEST_PREFIX}_json
+    ${UT_MODULE_NAME}
     PRIVATE
         TestJsonToken.cc
 )
 
 target_link_libraries(
-    ${IPDF_TEST_PREFIX}_json
+    ${UT_MODULE_NAME}
     PRIVATE
-        compiler
         json
         GTest::GTest
+        ipdf_ut_entry
+)
+
+add_test(
+    NAME ipdf_${UT_MODULE_NAME}
+    COMMAND $<TARGET_FILE:${UT_MODULE_NAME}>
 )
 
 # EOF
