@@ -10,6 +10,7 @@ add_executable(${UT_MODULE_NAME})
 target_sources(
     ${UT_MODULE_NAME}
     PRIVATE
+        TestJsonSerializer.cc
         TestJsonToken.cc
 )
 
@@ -17,7 +18,7 @@ target_link_libraries(
     ${UT_MODULE_NAME}
     PRIVATE
         json
-        GTest::GTest
+        GTest::gtest
         ipdf_ut_entry
 )
 
