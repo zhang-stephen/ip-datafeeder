@@ -1,0 +1,9 @@
+{
+    "name": "ipdf",
+    "version-string": "0.0.1",
+    "dependencies": [
+        "fmt",
+        "spdlog",
+        "gtest"
+    ]
+}
