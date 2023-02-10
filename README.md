@@ -45,22 +45,50 @@ not cleared for now, but I will push code as soon as I can.
 
 ### Build
 
+Use [vcpkg](https://github.com/microsoft/vcpkg) for managing dependencies for all platforms. Dependencies would be installed as declared in [vcpkg.json](./vcpkg.json) by vcpkg.
+
 #### Mac OS Ventura(Apple Silicon)
 
 *The prototype is being built on Mac OS with M1 pro.*
 Use [homebrew](https://brew.sh) to install dependencies.
 
 ```bash
-brew install pkg-config googletest fmt spdlog cmake
+brew install pkg-config vcpkg
+git clone git@github.com:microsoft/vcpkg.git --depth 1 <vcpkg_root>
 ```
 
-And `fmt` is replied by `spdlog`. Then create a folder, e.g. `build`, to store output of CMake.
-
-Use following command to build all targets(under the root of the repo):
+Then use following command to build all targets(under the root of the repo):
 
 ```bash
-cmake -B build -S ./ # configure the project
+mkdir build
+cmake -B build -S ./ -DCMAKE_TOOLCHAIN_FILE=<vcpkg_root>/scripts/buildsystems/vcpkg.cmake # configure the project with vcpkg
 cmake --build build  # build all targets
 ```
 
 And the executable file could be found as `build/src/ipdf` and `build/src/ipdf_test`.
+
+#### Windows 11 x64
+
+Install vcpkg into your PC as you like.
+
+If the visual studio is preferred, follow these commands:
+
+```bash
+mkdir build
+cmake -B build -S ./ -DCMAKE_TOOLCHAIN_FILE=<vcpkg_root>/scripts/buildsystems/vcpkg.cmake -G "Visual Studio 17 2022" -DUSE_MSVC=on # configure the project with vcpkg
+cmake --build build  # build all targets
+```
+
+vcpkg will install dependencies with triplet `x64-windows` if the `USE_MSVC` is true. Or dependencies will be installed with triplet `x64-mingw-static`. Run `vcpkg help triplet` to get more information.
+
+If the cygwin/mingw64/msys2(tested only) is preferred, use this command to configure the project:
+
+```bash
+cmake -B build -S ./ -DCMAKE_TOOLCHAIN_FILE=<vcpkg_root>/scripts/buildsystems/vcpkg.cmake # configure the project with vcpkg
+```
+
+Ninja configuration would be generated in the default if msys2 is installed.
+
+Known issue on windows:
+- spdlog cannot print log to console,
+- `ctest` cannot find test targets after building.

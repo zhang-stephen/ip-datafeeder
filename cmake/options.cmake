@@ -26,7 +26,11 @@ if(CMAKE_HOST_APPLE)
 elseif(${CMAKE_HOST_LINUX})
     # for Linux distros
 elseif(${CMAKE_HOST_WIN32})
-    # for MS Windows
+    option(
+        USE_MSVC
+        "Use Visual C++ to build all targets or not"
+        false
+    )
 endif()
 
 # EOF

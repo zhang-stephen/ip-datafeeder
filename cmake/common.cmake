@@ -51,6 +51,13 @@ target_compile_options(
 # platform
 if (CMAKE_HOST_APPLE)
     set(CMAKE_OSX_ARCHITECTURES "arm64")
+elseif (CMAKE_HOST_WIN32)
+    if (USE_MSVC)
+        set(VCPKG_TARGET_TRIPLET x64-windows)
+    else()
+        set(VCPKG_TARGET_TRIPLET x64-mingw-static)
+    endif()
+    message(STATUS "vcpkg triplet: ${VCPKG_TARGET_TRIPLET}")
 endif()
 
 # EOF
