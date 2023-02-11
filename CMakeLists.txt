@@ -8,15 +8,16 @@
 
 cmake_minimum_required(VERSION 3.23)
 
-# includes
-include(cmake/options.cmake)
-include(cmake/common.cmake)
-
 project(
     IP_DATAFEEDER
     LANGUAGES CXX # C
     DESCRIPTION "A LAN datafeeder, for embeded/FPGA debugging"
 )
+
+# includes
+include(cmake/options.cmake)
+include(cmake/common.cmake)
+include(CTest)
 
 # find_package(PkgConfig REQUIRED)
 find_package(spdlog 1.11.0 CONFIG REQUIRED)

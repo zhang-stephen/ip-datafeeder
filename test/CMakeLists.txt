@@ -3,8 +3,6 @@
 # to make difference with internal libraries from src/.
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-include(CTest)
-
 set(IPDF_TEST_POSTFIX "ut")
 
 add_library(ipdf_ut_entry STATIC)
