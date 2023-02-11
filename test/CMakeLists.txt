@@ -21,6 +21,7 @@ target_link_libraries(
         common
         logger
         utility
+        GTest::gtest
 )
 
 add_subdirectory(json)

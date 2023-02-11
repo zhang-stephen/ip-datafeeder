@@ -18,7 +18,6 @@ target_link_libraries(
     ${UT_MODULE_NAME}
     PRIVATE
         json
-        GTest::gtest
         ipdf_ut_entry
 )
 
