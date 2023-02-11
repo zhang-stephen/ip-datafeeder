@@ -32,9 +32,9 @@ concept StreamWrapper = requires(_StreamT s) {
     { s.peek4() } -> std::same_as<const typename _StreamT::Ch*>;
     { s.peek() } -> std::same_as<typename _StreamT::Ch>;
     { s.tell() } -> std::same_as<size_t>;
-    { s.put(_StreamT::Ch) };
+    { s.put(typename _StreamT::Ch{}) };
+    { s.put(typename _StreamT::Ch{}, size_t{})};
     { s.flush() };
-    { s.read() };
 };
 
 template <typename _StreamT, typename _CharT = char>
