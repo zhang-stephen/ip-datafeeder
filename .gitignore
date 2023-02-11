@@ -36,6 +36,7 @@
 /out*
 
 # IDE(e.g. neovim, vscode) extra directories
+/.vs
 /.vscode
 /.nvim
 /.cache

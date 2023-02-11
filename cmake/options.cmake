@@ -2,18 +2,6 @@
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
 # common options
-## Dependencies
-option(
-    USE_SYSTEM_GTEST
-    "Use GoogleTest provided by system, instead of git submodule"
-    true
-)
-
-option(
-    USE_SYSTEM_SPDLOG
-    "Use spdlog provided by system, instead of git submodule"
-    false
-)
 
 # platform specific options
 if(CMAKE_HOST_APPLE)
@@ -26,11 +14,6 @@ if(CMAKE_HOST_APPLE)
 elseif(${CMAKE_HOST_LINUX})
     # for Linux distros
 elseif(${CMAKE_HOST_WIN32})
-    option(
-        USE_MSVC
-        "Use Visual C++ to build all targets or not"
-        false
-    )
 endif()
 
 # EOF

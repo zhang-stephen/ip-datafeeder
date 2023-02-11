@@ -14,15 +14,16 @@ target_include_directories(
     logger
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${${SPDLOG_PACKAGE_NAME}_INCLUDE_DIR}
 )
 
 target_link_libraries(
     logger
+    PUBLIC
+        spdlog::spdlog_header_only
     PRIVATE
         compiler
         utility
-        ${${FMT_PACKAGE_NAME}_LIBRARY}
+        fmt::fmt
 )
 
 # EOF

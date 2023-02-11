@@ -18,10 +18,10 @@ project(
     DESCRIPTION "A LAN datafeeder, for embeded/FPGA debugging"
 )
 
-find_package(PkgConfig REQUIRED)
-find_package(spdlog 1.11.0 REQUIRED)
-find_package(fmt 9.1.0 REQUIRED)
-find_package(GTest 1.13.0 REQUIRED)
+# find_package(PkgConfig REQUIRED)
+find_package(spdlog 1.11.0 CONFIG REQUIRED)
+find_package(fmt 9.1.0 CONFIG REQUIRED)
+find_package(GTest 1.12.0 CONFIG REQUIRED)
 
 add_subdirectory(src)  # source files
 add_subdirectory(test) # UT/MT/Others

@@ -1,6 +1,6 @@
 {
     "name": "ipdf",
-    "version-string": "0.0.1",
+    "version-string": "latest",
     "dependencies": [
         "fmt",
         "spdlog",

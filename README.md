@@ -81,14 +81,7 @@ cmake --build build  # build all targets
 
 vcpkg will install dependencies with triplet `x64-windows` if the `USE_MSVC` is true. Or dependencies will be installed with triplet `x64-mingw-static`. Run `vcpkg help triplet` to get more information.
 
-If the cygwin/mingw64/msys2(tested only) is preferred, use this command to configure the project:
-
-```bash
-cmake -B build -S ./ -DCMAKE_TOOLCHAIN_FILE=<vcpkg_root>/scripts/buildsystems/vcpkg.cmake # configure the project with vcpkg
-```
-
-Ninja configuration would be generated in the default if msys2 is installed.
+__Not supported: cygwin/mingw64/msys2.__
 
 Known issue on windows:
-- spdlog cannot print log to console,
 - `ctest` cannot find test targets after building.
