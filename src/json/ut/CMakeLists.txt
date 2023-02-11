@@ -1,7 +1,7 @@
 # GTest for ipdf::json
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-set(UT_MODULE_NAME json_${IPDF_TEST_POSTFIX})
+set(UT_MODULE_NAME json_ut)
 
 message(STATUS "building ut -> ${UT_MODULE_NAME}")
 

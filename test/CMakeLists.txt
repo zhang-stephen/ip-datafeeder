@@ -6,6 +6,7 @@
 include(CTest)
 
 set(IPDF_TEST_POSTFIX "ut")
+
 add_library(ipdf_ut_entry STATIC)
 
 target_sources(
@@ -23,7 +24,5 @@ target_link_libraries(
         utility
         GTest::gtest
 )
-
-add_subdirectory(json)
 
 # EOF
