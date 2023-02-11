@@ -1,10 +1,10 @@
 # Internal Lib: utility
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(utility INTERFACE)
+add_library(ipdf_utility INTERFACE)
 
 target_include_directories(
-    utility
+    ipdf_utility
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )

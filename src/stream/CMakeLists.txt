@@ -19,7 +19,7 @@ target_include_directories(
 target_link_libraries(
     ipdf_stream
     PRIVATE
-        utility
+        ipdf_utility
 )
 
 # EOF

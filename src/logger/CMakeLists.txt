@@ -2,27 +2,27 @@
 # A wrapper and some initialization for spdlog
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(logger STATIC)
+add_library(ipdf_logger STATIC)
 
 target_sources(
-    logger
+    ipdf_logger
     PRIVATE
         Logger.cc
 )
 
 target_include_directories(
-    logger
+    ipdf_logger
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(
-    logger
+    ipdf_logger
     PUBLIC
         spdlog::spdlog_header_only
     PRIVATE
         compiler
-        utility
+        ipdf_utility
         fmt::fmt
 )
 
