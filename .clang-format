@@ -4,13 +4,18 @@ BasedOnStyle: WebKit
 
 # user-defined details
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+  PadOperators: true
 AlignConsecutiveDeclarations: Consecutive
 AlignConsecutiveBitFields: Consecutive
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortLoopsOnASingleLine: true
-AllowShortBlocksOnASingleLine: true
-AllowShortFunctionsOnASingleLine: Empty
+# AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false
