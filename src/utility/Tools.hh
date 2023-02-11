@@ -1,3 +1,6 @@
+// wrapper of common operations
+// Copyright (c) Stephen Zhang 2023. All Right Reserved.
+
 #ifndef __IPDF_UTILITY_TOOLS_HH
 #define __IPDF_UTILITY_TOOLS_HH
 

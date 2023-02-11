@@ -1,3 +1,6 @@
+// File R/W operations with stream-like styles
+// Copyright (c) Stephen Zhang 2023. All Right Reserved.
+
 #ifndef __IPDF_STREAM_FILE_STREAM_HH
 #define __IPDF_STREAM_FILE_STREAM_HH
 
