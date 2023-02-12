@@ -4,26 +4,19 @@
 #ifndef __IPDF_STREAM_FILE_STREAM_HH
 #define __IPDF_STREAM_FILE_STREAM_HH
 
-#include "Tools.hh"
+#include "Concepts.hh"
 
 #include <cstdio>
 
 namespace ipdf::stream
 {
-class FileReadStream
+class FileReadStream : public BasicInputStreamWrapper<FileReadStream>
 {
 public:
-    using Ch = char;
-
     FileReadStream()  = delete;
     ~FileReadStream() = default;
 
     FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize);
-
-    Ch        peek();
-    const Ch* peek4();
-    size_t    tell();
-    Ch        take();
 
     // not implemented
     void put(Ch) { IPDF_ASSERT(false); }
@@ -31,33 +24,18 @@ public:
     void flush() { IPDF_ASSERT(false); }
 
 private:
-    void read();
+    void read() override;
 
     std::FILE* fp_;
-    Ch*        buffer_;
-    Ch*        bufferLast_;
-    Ch*        current_;
-    size_t     bufferSize_;
-    size_t     count_;
-    size_t     readCount_;
-    bool       eof_;
 };
 
-class FileWriteStream
+class FileWriteStream : public BasicOutputStreamWrapper<FileWriteStream>
 {
 public:
-    using Ch = char;
-
-    FileWriteStream()                       = delete;
-    FileWriteStream(const FileWriteStream&) = delete;
-    FileWriteStream(FileWriteStream&&)      = delete;
+    FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize);
     ~FileWriteStream()                      = default;
 
-    FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize);
-
-    void put(Ch c);
-    void put(Ch c, size_t n);
-    void flush();
+    bool flush() override;
 
     // not implemented
     [[noreturn]] Ch        take() { IPDF_ASSERT(false); }
@@ -67,9 +45,6 @@ public:
 
 private:
     std::FILE* fp_;
-    Ch*        buffer_;
-    Ch*        bufferEnd_;
-    Ch*        current_;
 };
 } // namespace ipdf::stream
 
