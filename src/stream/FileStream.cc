@@ -56,7 +56,6 @@ bool FileWriteStream::flush()
     return result < used;
 }
 
-
 // concepts check
 static_assert(StreamWrapperConcept<FileReadStream>);
 static_assert(StreamWrapperConcept<FileWriteStream>);

@@ -4,12 +4,12 @@
 #ifndef __IPDF_STREAM_CONCEPTS_HH
 #define __IPDF_STREAM_CONCEPTS_HH
 
+#include "Tools.hh"
+
 #include <concepts>
 #include <cstdint>
 #include <iostream>
 #include <type_traits>
-
-#include "Tools.hh"
 
 namespace ipdf::stream
 {
@@ -64,6 +64,7 @@ public:
         , eof_(false)
     {
         IPDF_ASSERT(bufferSize_ >= 4); // for peek4(), used to unicode checking.
+        IPDF_ASSERT(buffer_ != nullptr);
     }
 
     const Ch* peek4() { return (current_ + 4 - !eof_ <= bufferLast_) ? current_ : nullptr; }
@@ -94,7 +95,13 @@ class BasicOutputStreamWrapper
 public:
     using Ch = _CharT;
 
-    BasicOutputStreamWrapper(Ch* buffer, size_t bufferSize) {}
+    BasicOutputStreamWrapper(Ch* buffer, size_t bufferSize)
+        : buffer_(buffer)
+        , current_(buffer_)
+        , bufferEnd_(buffer_ + bufferSize)
+    {
+        IPDF_ASSERT(buffer_ != nullptr);
+    }
 
     BasicOutputStreamWrapper() = delete;
     BasicOutputStreamWrapper(const BasicOutputStreamWrapper&) = delete;
@@ -113,8 +120,9 @@ public:
 
         while (n > avail)
         {
-            std::memset(current_, c, avail);
-            current_ += avail;
+            // NOTE: why not std::memset? the sizeof(Ch) may not be 1.
+            for (size_t i = 0; i < avail; i++) *current_++ = c;
+
             flush();
             n     -= avail;
             avail = static_cast<size_t>(bufferEnd_ - current_);
@@ -122,8 +130,7 @@ public:
 
         if (n > 0)
         {
-            std::memset(current_, c, n);
-            current_ += n;
+            for (size_t i = 0; i < n; i++) *current_++ = c;
         }
     }
 
