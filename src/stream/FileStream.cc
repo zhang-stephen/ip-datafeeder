@@ -9,7 +9,7 @@ namespace ipdf::stream
 {
 FileReadStream::FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
     : fp_(fp)
-    , BasicInputStreamWrapper<FileReadStream>(buffer, bufferSize)
+    , BasicInputStreamWrapper(buffer, bufferSize)
 {
     IPDF_ASSERT(fp_ != nullptr);
     read();

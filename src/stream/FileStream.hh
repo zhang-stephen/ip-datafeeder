@@ -10,7 +10,7 @@
 
 namespace ipdf::stream
 {
-class FileReadStream : public BasicInputStreamWrapper<FileReadStream>
+class FileReadStream : public BasicInputStreamWrapper<std::FILE*>
 {
 public:
     FileReadStream()  = delete;
@@ -29,7 +29,7 @@ private:
     std::FILE* fp_;
 };
 
-class FileWriteStream : public BasicOutputStreamWrapper<FileWriteStream>
+class FileWriteStream : public BasicOutputStreamWrapper<std::FILE*>
 {
 public:
     FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize);

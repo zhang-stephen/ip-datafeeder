@@ -13,6 +13,12 @@
 
 namespace ipdf::stream
 {
+template <typename T>
+struct RawStreamTraits
+{
+    using Ch = typename T::char_type;
+};
+
 // HACK: format of concept/requires not supported completely in LLVM 15.
 // clang-format off
 namespace
@@ -20,11 +26,11 @@ namespace
 template <typename _StreamT>
 concept FilePointerType = requires { std::is_same_v<std::remove_cv<_StreamT*>, std::FILE*>; };
 
-template <typename _StreamT, typename _CharT>
-concept DerivedFromInputStream = std::derived_from<_StreamT, std::basic_istream<_CharT>>;
+template <typename _StreamT>
+concept DerivedFromInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
 
-template <typename _StreamT, typename _CharT>
-concept DerivedFromOutputStream =  std::derived_from<_StreamT, std::basic_ostream<_CharT>>;
+template <typename _StreamT>
+concept DerivedFromOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
 }
 
 template <typename _StreamT>
@@ -40,20 +46,33 @@ concept StreamWrapperConcept = requires(_StreamT s) {
     { std::invocable<decltype(&_StreamT::puts), _StreamT&, typename _StreamT::Ch, size_t> };
 };
 
-template <typename _StreamT, typename _CharT = char>
+template <typename _StreamT>
 concept RawInputStream = requires {
-    FilePointerType<_StreamT> || DerivedFromInputStream<_StreamT, _CharT>;
+    FilePointerType<_StreamT> || DerivedFromInputStream<_StreamT>;
 };
 
-template <typename _StreamT, typename _CharT = char>
-concept RawOutputStream = DerivedFromOutputStream<_StreamT, _CharT>;
+template <typename _StreamT>
+concept RawOutputStream = DerivedFromOutputStream<_StreamT>;
 // clang-format on
 
-template <typename _StreamT, typename _CharT = char>
+template <>
+struct RawStreamTraits<std::FILE*>
+{
+    using Ch = char;
+};
+
+template <>
+struct RawStreamTraits<int>
+{
+    // for Socket fd in the future
+    using Ch = unsigned char;
+};
+
+template <typename _RawStreamT, typename _Traits = RawStreamTraits<_RawStreamT>>
 class BasicInputStreamWrapper
 {
 public:
-    using Ch = _CharT;
+    using Ch = typename _Traits::Ch;
 
     BasicInputStreamWrapper(Ch* buffer, size_t bufferSize)
         : buffer_(buffer)
@@ -89,11 +108,11 @@ protected:
     bool   eof_;
 };
 
-template <typename _StreamT, typename _CharT = char>
+template <typename _StreamT, typename _Traits = RawStreamTraits<_StreamT>>
 class BasicOutputStreamWrapper
 {
 public:
-    using Ch = _CharT;
+    using Ch = typename _Traits::Ch;
 
     BasicOutputStreamWrapper(Ch* buffer, size_t bufferSize)
         : buffer_(buffer)
@@ -104,9 +123,9 @@ public:
     }
 
     BasicOutputStreamWrapper() = delete;
-    BasicOutputStreamWrapper(const BasicOutputStreamWrapper&) = delete;
-    BasicOutputStreamWrapper(BasicOutputStreamWrapper&&)      = delete;
-    virtual ~BasicOutputStreamWrapper()                        = default;
+    // BasicOutputStreamWrapper(const BasicOutputStreamWrapper&) = delete;
+    // BasicOutputStreamWrapper(BasicOutputStreamWrapper&&)      = delete;
+    virtual ~BasicOutputStreamWrapper() = default;
 
     void put(Ch c)
     {
