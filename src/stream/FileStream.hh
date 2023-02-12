@@ -20,8 +20,8 @@ public:
 
     // not implemented
     void put(Ch) { IPDF_ASSERT(false); }
-    void put(Ch, size_t) { IPDF_ASSERT(false); }
-    void flush() { IPDF_ASSERT(false); }
+    void puts(Ch, size_t) { IPDF_ASSERT(false); }
+    bool flush() { IPDF_ASSERT(false); }
 
 private:
     void read() override;

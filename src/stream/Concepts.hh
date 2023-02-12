@@ -28,15 +28,16 @@ concept DerivedFromOutputStream =  std::derived_from<_StreamT, std::basic_ostrea
 }
 
 template <typename _StreamT>
-concept StreamWrapper = requires(_StreamT s) {
+concept StreamWrapperConcept = requires(_StreamT s) {
     typename _StreamT::Ch;
     { s.take() } -> std::same_as<typename _StreamT::Ch>;
     { s.peek4() } -> std::same_as<const typename _StreamT::Ch*>;
     { s.peek() } -> std::same_as<typename _StreamT::Ch>;
     { s.tell() } -> std::same_as<size_t>;
+    { s.flush() } -> std::same_as<bool>;
     { s.put(typename _StreamT::Ch{}) };
-    { s.put(typename _StreamT::Ch{}, size_t{})};
-    { s.flush() };
+    // { s.put(typename _StreamT::Ch{}, size_t{})};
+    { std::invocable<decltype(&_StreamT::puts), _StreamT&, typename _StreamT::Ch, size_t> };
 };
 
 template <typename _StreamT, typename _CharT = char>
@@ -63,7 +64,6 @@ public:
         , eof_(false)
     {
         IPDF_ASSERT(bufferSize_ >= 4); // for peek4(), used to unicode checking.
-        read();
     }
 
     const Ch* peek4() { return (current_ + 4 - !eof_ <= bufferLast_) ? current_ : nullptr; }
@@ -107,7 +107,7 @@ public:
         *current_++ = c;
     }
 
-    void put(Ch c, size_t n) 
+    void puts(Ch c, size_t n)
     {
         auto avail = static_cast<size_t>(bufferEnd_ - current_);
 

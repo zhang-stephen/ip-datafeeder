@@ -12,6 +12,7 @@ FileReadStream::FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
     , BasicInputStreamWrapper<FileReadStream>(buffer, bufferSize)
 {
     IPDF_ASSERT(fp_ != nullptr);
+    read();
 }
 
 void FileReadStream::read()
@@ -43,7 +44,7 @@ FileWriteStream::FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
     IPDF_ASSERT(fp_ != nullptr);
 }
 
-bool FileWriteStream::flush() 
+bool FileWriteStream::flush()
 {
     if (current_ == buffer_) return true;
 
@@ -57,8 +58,8 @@ bool FileWriteStream::flush()
 
 
 // concepts check
-static_assert(StreamWrapper<FileReadStream>);
-static_assert(StreamWrapper<FileWriteStream>);
+static_assert(StreamWrapperConcept<FileReadStream>);
+static_assert(StreamWrapperConcept<FileWriteStream>);
 } // namespace ipdf::stream
 
 // EOF
