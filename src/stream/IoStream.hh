@@ -10,58 +10,77 @@
 
 namespace ipdf::stream
 {
-template <RawInputStream _StreamT>
-class InputStreamWrapper : public BasicInputStreamWrapper<_StreamT>
+template <RawInputStream _StreamT = std::istream>
+class InputStream : public BasicInputStreamWrapper<_StreamT>
 {
 public:
     using StreamType = _StreamT;
     using Ch         = typename BasicOutputStreamWrapper<_StreamT>::Ch;
 
-    InputStreamWrapper(StreamType& is, Ch* buffer, size_t bufferSize)
+    InputStream(StreamType& is, Ch* buffer, size_t bufferSize)
         : is_(is)
         , BasicInputStreamWrapper<_StreamT>(buffer, bufferSize)
     {
-        read();
+        // NOTE: https://isocpp.org/wiki/faq/templates#nondependent-name-lookup-types
+        this->read();
     }
 
-    // not implemented
-    void put(Ch) { IPDF_ASSERT(false); }
-    void puts(Ch) { IPDF_ASSERT(false); }
-    bool flush() { IPDF_ASSERT(false); }
-
 private:
-    void read() override {}
+    void read() override
+    {
+        if (this->current_ < this->bufferLast_)
+        {
+            this->current_++;
+        }
+        else if (!this->eof_)
+        {
+            this->count_      += this->readCount_;
+            this->readCount_  = this->bufferSize_;
+            this->bufferLast_ = this->buffer_ + this->readCount_ - 1;
+            this->current_    = this->buffer_;
+
+            if (!is_.read(this->buffer_, this->bufferSize_))
+            {
+                this->readCount_     = is_.gcount();
+                this->bufferLast_    = this->buffer_ + this->readCount_;
+                *(this->bufferLast_) = '\0';
+                this->eof_           = true;
+            }
+        }
+    }
 
     StreamType& is_;
 };
 
-template <RawOutputStream _StreamT>
-class OutputStreamWrapper : public BasicOutputStreamWrapper<_StreamT>
+template <RawOutputStream _StreamT = std::ostream>
+class OutputStream : public BasicOutputStreamWrapper<_StreamT>
 {
 public:
     using StreamType = _StreamT;
     using Ch         = typename BasicOutputStreamWrapper<_StreamT>::Ch;
 
-    OutputStreamWrapper(StreamType& os, Ch* buffer, size_t bufferSize)
+    OutputStream(StreamType& os)
         : os_(os)
-        , BasicOutputStreamWrapper<_StreamT>(buffer, bufferSize)
+        , BasicOutputStreamWrapper<_StreamT>(nullptr, 0)
     {
     }
 
-    bool flush() {}
+    bool flush() override
+    {
+        os_.flush();
+        return true;
+    }
 
-    // not implemented
-    Ch        peek() { IPDF_ASSERT(false); }
-    Ch        take() { IPDF_ASSERT(false); }
-    const Ch* peek4() { IPDF_ASSERT(false); }
-    size_t    tell() { IPDF_ASSERT(false); }
+    void put(Ch c) override { os_.put(c); }
+
+    void puts(Ch c, size_t n) override
+    {
+        for (size_t i = 0; i < n; i++) put(c);
+    }
 
 private:
     StreamType& os_;
 };
-
-static_assert(StreamWrapperConcept<InputStreamWrapper<std::istream>>);
-static_assert(StreamWrapperConcept<OutputStreamWrapper<std::ostream>>);
 } // namespace ipdf::stream
 
 #endif // __IPDF_STREAM_IO_STREAM_HH

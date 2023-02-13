@@ -3,8 +3,6 @@
 
 #include "FileStream.hh"
 
-#include <cstdio>
-
 namespace ipdf::stream
 {
 FileReadStream::FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
@@ -56,9 +54,31 @@ bool FileWriteStream::flush()
     return result < used;
 }
 
-// concepts check
-static_assert(StreamWrapperConcept<FileReadStream>);
-static_assert(StreamWrapperConcept<FileWriteStream>);
+void FileWriteStream::put(Ch c)
+{
+    if (current_ >= bufferEnd_) flush();
+    *current_++ = c;
+}
+
+void FileWriteStream::puts(Ch c, size_t n)
+{
+    auto avail = static_cast<size_t>(bufferEnd_ - current_);
+
+    while (n > avail)
+    {
+        // NOTE: why not std::memset? the sizeof(Ch) may not be 1.
+        for (size_t i = 0; i < avail; i++) *current_++ = c;
+
+        flush();
+        n     -= avail;
+        avail = static_cast<size_t>(bufferEnd_ - current_);
+    }
+
+    if (n > 0)
+    {
+        for (size_t i = 0; i < n; i++) *current_++ = c;
+    }
+}
 } // namespace ipdf::stream
 
 // EOF

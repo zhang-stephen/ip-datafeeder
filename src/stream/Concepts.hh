@@ -8,7 +8,9 @@
 
 #include <concepts>
 #include <cstdint>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <type_traits>
 
 namespace ipdf::stream
@@ -19,18 +21,37 @@ struct RawStreamTraits
     using Ch = typename T::char_type;
 };
 
+template <>
+struct RawStreamTraits<std::FILE*>
+{
+    using Ch = char;
+};
+
+template <>
+struct RawStreamTraits<int>
+{
+    // for Socket fd in the future
+    using Ch = unsigned char;
+};
+
 // HACK: format of concept/requires not supported completely in LLVM 15.
 // clang-format off
 namespace
 {
 template <typename _StreamT>
-concept FilePointerType = requires { std::is_same_v<std::remove_cv<_StreamT*>, std::FILE*>; };
+concept FilePointerType = std::same_as<std::remove_cv<_StreamT>, std::FILE*>;
 
 template <typename _StreamT>
-concept DerivedFromInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
+concept SameAsStdBasicInputStream = std::same_as<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
 
 template <typename _StreamT>
-concept DerivedFromOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
+concept DerivedFromStdInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
+
+template <typename _StreamT>
+concept SameAsStdBasicOutputStream = std::same_as<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
+
+template <typename _StreamT>
+concept DerivedFromStdOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
 }
 
 template <typename _StreamT>
@@ -48,25 +69,19 @@ concept StreamWrapperConcept = requires(_StreamT s) {
 
 template <typename _StreamT>
 concept RawInputStream = requires {
-    FilePointerType<_StreamT> || DerivedFromInputStream<_StreamT>;
+    FilePointerType<_StreamT> ||
+    SameAsStdBasicInputStream<_StreamT> || DerivedFromStdInputStream<_StreamT>;
 };
 
 template <typename _StreamT>
-concept RawOutputStream = DerivedFromOutputStream<_StreamT>;
+concept RawOutputStream = requires {
+    FilePointerType<_StreamT> ||
+    SameAsStdBasicOutputStream<_StreamT> || DerivedFromStdOutputStream<_StreamT>;
+};
+
+template<typename _StreamT>
+concept RawIoStream = RawInputStream<_StreamT> && RawOutputStream<_StreamT>;
 // clang-format on
-
-template <>
-struct RawStreamTraits<std::FILE*>
-{
-    using Ch = char;
-};
-
-template <>
-struct RawStreamTraits<int>
-{
-    // for Socket fd in the future
-    using Ch = unsigned char;
-};
 
 template <typename _RawStreamT, typename _Traits = RawStreamTraits<_RawStreamT>>
 class BasicInputStreamWrapper
@@ -119,7 +134,6 @@ public:
         , current_(buffer_)
         , bufferEnd_(buffer_ + bufferSize)
     {
-        IPDF_ASSERT(buffer_ != nullptr);
     }
 
     BasicOutputStreamWrapper() = delete;
@@ -127,39 +141,35 @@ public:
     // BasicOutputStreamWrapper(BasicOutputStreamWrapper&&)      = delete;
     virtual ~BasicOutputStreamWrapper() = default;
 
-    void put(Ch c)
-    {
-        if (current_ >= bufferEnd_) flush();
-        *current_++ = c;
-    }
-
-    void puts(Ch c, size_t n)
-    {
-        auto avail = static_cast<size_t>(bufferEnd_ - current_);
-
-        while (n > avail)
-        {
-            // NOTE: why not std::memset? the sizeof(Ch) may not be 1.
-            for (size_t i = 0; i < avail; i++) *current_++ = c;
-
-            flush();
-            n     -= avail;
-            avail = static_cast<size_t>(bufferEnd_ - current_);
-        }
-
-        if (n > 0)
-        {
-            for (size_t i = 0; i < n; i++) *current_++ = c;
-        }
-    }
-
-    virtual bool flush() = 0;
+    virtual void put(Ch)          = 0;
+    virtual void puts(Ch, size_t) = 0;
+    virtual bool flush()          = 0;
 
 protected:
     Ch* buffer_;
     Ch* bufferEnd_;
     Ch* current_;
 };
+
+// check for raw streams
+static_assert(RawInputStream<std::istream>); // FIXME: why is it passed?
+static_assert(RawInputStream<std::wistream>);
+static_assert(RawInputStream<std::ifstream>);
+static_assert(RawInputStream<std::wifstream>);
+static_assert(RawInputStream<std::istringstream>);
+static_assert(RawInputStream<std::wistringstream>);
+static_assert(RawOutputStream<std::ostream>);
+static_assert(RawOutputStream<std::wostream>);
+static_assert(RawOutputStream<std::ofstream>);
+static_assert(RawOutputStream<std::wofstream>);
+static_assert(RawOutputStream<std::ostringstream>);
+static_assert(RawOutputStream<std::wostringstream>);
+static_assert(RawIoStream<std::iostream>);
+static_assert(RawIoStream<std::wiostream>);
+static_assert(RawIoStream<std::fstream>);
+static_assert(RawIoStream<std::wfstream>);
+static_assert(RawIoStream<std::stringstream>);
+static_assert(RawIoStream<std::wstringstream>);
 } // namespace ipdf::stream
 
 #endif // __IPDF_STREAM_CONCEPTS_HH

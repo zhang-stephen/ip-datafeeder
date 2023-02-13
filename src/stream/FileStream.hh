@@ -18,11 +18,6 @@ public:
 
     FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize);
 
-    // not implemented
-    void put(Ch) { IPDF_ASSERT(false); }
-    void puts(Ch, size_t) { IPDF_ASSERT(false); }
-    bool flush() { IPDF_ASSERT(false); }
-
 private:
     void read() override;
 
@@ -33,15 +28,11 @@ class FileWriteStream : public BasicOutputStreamWrapper<std::FILE*>
 {
 public:
     FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize);
-    ~FileWriteStream()                      = default;
+    ~FileWriteStream() = default;
 
     bool flush() override;
-
-    // not implemented
-    [[noreturn]] Ch        take() { IPDF_ASSERT(false); }
-    [[noreturn]] Ch        peek() { IPDF_ASSERT(false); }
-    [[noreturn]] const Ch* peek4() { IPDF_ASSERT(false); }
-    [[noreturn]] size_t    tell() { IPDF_ASSERT(false); }
+    void put(Ch c) override;
+    void puts(Ch c, size_t n) override;
 
 private:
     std::FILE* fp_;
