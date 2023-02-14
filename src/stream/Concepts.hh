@@ -21,6 +21,9 @@ struct RawStreamTraits
     using Ch = typename T::char_type;
 };
 
+template <typename T>
+using RawStreamCharType = typename RawStreamTraits<T>::Ch;
+
 template <>
 struct RawStreamTraits<std::FILE*>
 {
@@ -42,42 +45,30 @@ template <typename _StreamT>
 concept FilePointerType = std::same_as<std::remove_cv<_StreamT>, std::FILE*>;
 
 template <typename _StreamT>
-concept SameAsStdBasicInputStream = std::same_as<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
+concept DerivedFromStdInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamCharType<_StreamT>>>;
 
 template <typename _StreamT>
-concept DerivedFromStdInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamTraits<_StreamT>>>;
-
-template <typename _StreamT>
-concept SameAsStdBasicOutputStream = std::same_as<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
-
-template <typename _StreamT>
-concept DerivedFromStdOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamTraits<_StreamT>>>;
+concept DerivedFromStdOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamCharType<_StreamT>>>;
 }
 
-template <typename _StreamT>
-concept StreamWrapperConcept = requires(_StreamT s) {
-    typename _StreamT::Ch;
-    { s.take() } -> std::same_as<typename _StreamT::Ch>;
-    { s.peek4() } -> std::same_as<const typename _StreamT::Ch*>;
-    { s.peek() } -> std::same_as<typename _StreamT::Ch>;
-    { s.tell() } -> std::same_as<size_t>;
-    { s.flush() } -> std::same_as<bool>;
-    { s.put(typename _StreamT::Ch{}) };
-    // { s.put(typename _StreamT::Ch{}, size_t{})};
-    { std::invocable<decltype(&_StreamT::puts), _StreamT&, typename _StreamT::Ch, size_t> };
-};
+// template <typename _StreamT>
+// concept StreamWrapperConcept = requires(_StreamT s) {
+//     typename _StreamT::Ch;
+//     { s.take() } -> std::same_as<typename _StreamT::Ch>;
+//     { s.peek4() } -> std::same_as<const typename _StreamT::Ch*>;
+//     { s.peek() } -> std::same_as<typename _StreamT::Ch>;
+//     { s.tell() } -> std::same_as<size_t>;
+//     { s.flush() } -> std::same_as<bool>;
+//     { s.put(typename _StreamT::Ch{}) };
+//     // { s.put(typename _StreamT::Ch{}, size_t{})};
+//     { std::invocable<decltype(&_StreamT::puts), _StreamT&, typename _StreamT::Ch, size_t> };
+// };
 
 template <typename _StreamT>
-concept RawInputStream = requires {
-    FilePointerType<_StreamT> ||
-    SameAsStdBasicInputStream<_StreamT> || DerivedFromStdInputStream<_StreamT>;
-};
+concept RawInputStream = FilePointerType<_StreamT> || DerivedFromStdInputStream<_StreamT>;
 
 template <typename _StreamT>
-concept RawOutputStream = requires {
-    FilePointerType<_StreamT> ||
-    SameAsStdBasicOutputStream<_StreamT> || DerivedFromStdOutputStream<_StreamT>;
-};
+concept RawOutputStream = FilePointerType<_StreamT> || DerivedFromStdOutputStream<_StreamT>;
 
 template<typename _StreamT>
 concept RawIoStream = RawInputStream<_StreamT> && RawOutputStream<_StreamT>;
@@ -152,7 +143,7 @@ protected:
 };
 
 // check for raw streams
-static_assert(RawInputStream<std::istream>); // FIXME: why is it passed?
+static_assert(RawInputStream<std::istream>);
 static_assert(RawInputStream<std::wistream>);
 static_assert(RawInputStream<std::ifstream>);
 static_assert(RawInputStream<std::wifstream>);
