@@ -6,10 +6,9 @@
 namespace ipdf::stream
 {
 FileReadStream::FileReadStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
-    : fp_(fp)
-    , BasicInputStreamWrapper(buffer, bufferSize)
+    : BasicInputStreamWrapper(fp, buffer, bufferSize)
 {
-    IPDF_ASSERT(fp_ != nullptr);
+    IPDF_ASSERT(fp != nullptr);
     read();
 }
 
@@ -22,7 +21,7 @@ void FileReadStream::read()
     else if (!eof_)
     {
         count_      += readCount_;
-        readCount_  = std::fread(buffer_, sizeof(Ch), bufferSize_, fp_);
+        readCount_  = std::fread(buffer_, sizeof(Ch), bufferSize_, this->stream_);
         bufferLast_ = buffer_ + readCount_ - 1;
         current_    = buffer_;
 
@@ -36,10 +35,9 @@ void FileReadStream::read()
 }
 
 FileWriteStream::FileWriteStream(std::FILE* fp, Ch* buffer, size_t bufferSize)
-    : fp_(fp)
-    , BasicOutputStreamWrapper(buffer, bufferSize)
+    : BasicOutputStreamWrapper(fp, buffer, bufferSize)
 {
-    IPDF_ASSERT(fp_ != nullptr);
+    IPDF_ASSERT(fp != nullptr);
 }
 
 bool FileWriteStream::flush()
@@ -47,7 +45,7 @@ bool FileWriteStream::flush()
     if (current_ == buffer_) return true;
 
     auto used   = static_cast<size_t>(current_ - buffer_);
-    auto result = std::fwrite(buffer_, sizeof(Ch), used, fp_);
+    auto result = std::fwrite(buffer_, sizeof(Ch), used, this->stream_);
     current_    = buffer_;
 
     // NOTE: do not be treated as error if size written into file is less than buffer used.

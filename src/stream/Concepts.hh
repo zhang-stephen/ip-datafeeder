@@ -18,7 +18,8 @@ namespace ipdf::stream
 template <typename T>
 struct RawStreamTraits
 {
-    using Ch = typename T::char_type;
+    using Ch         = typename T::char_type;
+    using StreamType = T&;
 };
 
 template <typename T>
@@ -27,14 +28,16 @@ using RawStreamCharType = typename RawStreamTraits<T>::Ch;
 template <>
 struct RawStreamTraits<std::FILE*>
 {
-    using Ch = char;
+    using Ch         = char;
+    using StreamType = std::FILE*;
 };
 
 template <>
 struct RawStreamTraits<int>
 {
     // for Socket fd in the future
-    using Ch = unsigned char;
+    using Ch         = unsigned char;
+    using StreamType = int;
 };
 
 // HACK: format of concept/requires not supported completely in LLVM 15.
@@ -42,7 +45,7 @@ struct RawStreamTraits<int>
 namespace
 {
 template <typename _StreamT>
-concept FilePointerType = std::same_as<std::remove_cv<_StreamT>, std::FILE*>;
+concept FilePointerType = std::same_as<_StreamT, std::FILE*>;
 
 template <typename _StreamT>
 concept DerivedFromStdInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamCharType<_StreamT>>>;
@@ -78,10 +81,12 @@ template <typename _RawStreamT, typename _Traits = RawStreamTraits<_RawStreamT>>
 class BasicInputStreamWrapper
 {
 public:
-    using Ch = typename _Traits::Ch;
+    using StreamType = typename _Traits::StreamType;
+    using Ch         = typename _Traits::Ch;
 
-    BasicInputStreamWrapper(Ch* buffer, size_t bufferSize)
-        : buffer_(buffer)
+    BasicInputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
+        : stream_(stream)
+        , buffer_(buffer)
         , bufferSize_(bufferSize)
         , current_(buffer_)
         , count_(0)
@@ -91,6 +96,9 @@ public:
         IPDF_ASSERT(bufferSize_ >= 4); // for peek4(), used to unicode checking.
         IPDF_ASSERT(buffer_ != nullptr);
     }
+
+    BasicInputStreamWrapper()  = delete;
+    ~BasicInputStreamWrapper() = default;
 
     const Ch* peek4() { return (current_ + 4 - !eof_ <= bufferLast_) ? current_ : nullptr; }
     Ch        peek() { return *current_; }
@@ -105,23 +113,26 @@ public:
 protected:
     virtual void read() = 0;
 
-    size_t bufferSize_;
-    size_t count_;
-    size_t readCount_;
-    Ch*    buffer_;
-    Ch*    bufferLast_;
-    Ch*    current_;
-    bool   eof_;
+    StreamType stream_;
+    size_t     bufferSize_;
+    size_t     count_;
+    size_t     readCount_;
+    Ch*        buffer_;
+    Ch*        bufferLast_;
+    Ch*        current_;
+    bool       eof_;
 };
 
 template <typename _StreamT, typename _Traits = RawStreamTraits<_StreamT>>
 class BasicOutputStreamWrapper
 {
 public:
-    using Ch = typename _Traits::Ch;
+    using StreamType = typename _Traits::StreamType;
+    using Ch         = typename _Traits::Ch;
 
-    BasicOutputStreamWrapper(Ch* buffer, size_t bufferSize)
-        : buffer_(buffer)
+    BasicOutputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
+        : stream_(stream)
+        , buffer_(buffer)
         , current_(buffer_)
         , bufferEnd_(buffer_ + bufferSize)
     {
@@ -137,9 +148,10 @@ public:
     virtual bool flush()          = 0;
 
 protected:
-    Ch* buffer_;
-    Ch* bufferEnd_;
-    Ch* current_;
+    StreamType stream_;
+    Ch*        buffer_;
+    Ch*        bufferEnd_;
+    Ch*        current_;
 };
 
 // check for raw streams

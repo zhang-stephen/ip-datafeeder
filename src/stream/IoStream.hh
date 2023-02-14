@@ -14,12 +14,11 @@ template <RawInputStream _StreamT = std::istream>
 class InputStream : public BasicInputStreamWrapper<_StreamT>
 {
 public:
-    using StreamType = _StreamT;
-    using Ch         = typename BasicOutputStreamWrapper<_StreamT>::Ch;
+    using StreamType = typename BasicInputStreamWrapper<_StreamT>::StreamType;
+    using Ch         = typename BasicInputStreamWrapper<_StreamT>::Ch;
 
-    InputStream(StreamType& is, Ch* buffer, size_t bufferSize)
-        : is_(is)
-        , BasicInputStreamWrapper<_StreamT>(buffer, bufferSize)
+    InputStream(StreamType is, Ch* buffer, size_t bufferSize)
+        : BasicInputStreamWrapper<_StreamT>(is, buffer, bufferSize)
     {
         // NOTE: https://isocpp.org/wiki/faq/templates#nondependent-name-lookup-types
         this->read();
@@ -39,48 +38,47 @@ private:
             this->bufferLast_ = this->buffer_ + this->readCount_ - 1;
             this->current_    = this->buffer_;
 
-            if (!is_.read(this->buffer_, this->bufferSize_))
+            if (!this->stream_.read(this->buffer_, this->bufferSize_))
             {
-                this->readCount_     = is_.gcount();
+                this->readCount_     = this->stream_.gcount();
                 this->bufferLast_    = this->buffer_ + this->readCount_;
                 *(this->bufferLast_) = '\0';
                 this->eof_           = true;
             }
         }
     }
-
-    StreamType& is_;
 };
 
 template <RawOutputStream _StreamT = std::ostream>
 class OutputStream : public BasicOutputStreamWrapper<_StreamT>
 {
 public:
-    using StreamType = _StreamT;
+    using StreamType = typename BasicOutputStreamWrapper<_StreamT>::StreamType;
     using Ch         = typename BasicOutputStreamWrapper<_StreamT>::Ch;
 
-    OutputStream(StreamType& os)
-        : os_(os)
-        , BasicOutputStreamWrapper<_StreamT>(nullptr, 0)
+    OutputStream(StreamType os)
+        : BasicOutputStreamWrapper<_StreamT>(os, nullptr, 0)
     {
     }
 
     bool flush() override
     {
-        os_.flush();
+        this->stream_.flush();
         return true;
     }
 
-    void put(Ch c) override { os_.put(c); }
+    void put(Ch c) override { this->stream_.put(c); }
 
     void puts(Ch c, size_t n) override
     {
         for (size_t i = 0; i < n; i++) put(c);
     }
-
-private:
-    StreamType& os_;
 };
+
+// using FileReadStream2 = InputStream<std::FILE*>;
+
+// auto x = FileReadStream2(nullptr, nullptr, 0);
+
 } // namespace ipdf::stream
 
 #endif // __IPDF_STREAM_IO_STREAM_HH
