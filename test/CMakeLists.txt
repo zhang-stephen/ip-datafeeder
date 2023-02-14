@@ -17,9 +17,9 @@ target_link_libraries(
     ipdf_ut_entry
     PUBLIC
         compiler
-        ipdf_common
-        ipdf_logger
-        ipdf_utility
+        common
+        logger
+        utility
         GTest::gtest
 )
 

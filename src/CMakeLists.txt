@@ -21,10 +21,10 @@ target_link_libraries(
     ${IPDF_EXECUTABLE_BIN}
     PUBLIC
         compiler
-        ipdf_common
-        ipdf_json
-        ipdf_logger
-        ipdf_utility
+        common
+        json
+        logger
+        utility
 )
 
 # EOF

@@ -17,7 +17,7 @@ target_sources(
 target_link_libraries(
     ${UT_MODULE_NAME}
     PRIVATE
-        ipdf_json
+        json
         ipdf_ut_entry
 )
 

@@ -2,24 +2,24 @@
 # with experimental Unicode support, low priority.
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(ipdf_stream STATIC)
+add_library(stream STATIC)
 
 target_sources(
-    ipdf_stream
+    stream
     PRIVATE
         FileStream.cc
 )
 
 target_include_directories(
-    ipdf_stream
+    stream
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(
-    ipdf_stream
+    stream
     PRIVATE
-        ipdf_utility
+        utility
 )
 
 # EOF
