@@ -24,6 +24,8 @@ public:
         this->read();
     }
 
+    ~InputStream() = default;
+
 protected:
     void read() override
     {
@@ -61,17 +63,20 @@ public:
     {
     }
 
-    bool flush() override
-    {
-        this->stream_.flush();
-        return true;
-    }
+    ~OutputStream() = default;
 
     void put(Ch c) override { this->stream_.put(c); }
+    void write(Ch* src, size_t n) override { this->stream_.write(src, n); }
 
     void puts(Ch c, size_t n) override
     {
         for (size_t i = 0; i < n; i++) put(c);
+    }
+
+    bool flush() override
+    {
+        this->stream_.flush();
+        return true;
     }
 };
 } // namespace ipdf::stream

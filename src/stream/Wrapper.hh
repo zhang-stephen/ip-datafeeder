@@ -36,7 +36,7 @@ template <>
 struct RawStreamTraits<int>
 {
     // for Socket fd in the future
-    using Ch         = unsigned char;
+    using Ch         = uint8_t;
     using StreamType = int;
 };
 
@@ -144,9 +144,10 @@ public:
     // BasicOutputStreamWrapper(BasicOutputStreamWrapper&&)      = delete;
     virtual ~BasicOutputStreamWrapper() = default;
 
-    virtual void put(Ch)          = 0;
-    virtual void puts(Ch, size_t) = 0;
-    virtual bool flush()          = 0;
+    virtual void put(Ch)            = 0;
+    virtual void puts(Ch, size_t)   = 0;
+    virtual void write(Ch*, size_t) = 0;
+    virtual bool flush()            = 0;
 
 protected:
     StreamType stream_;

@@ -1,6 +1,12 @@
-#pragma once
+// File R/W operations with stream-like styles
+// Copyright (c) Stephen Zhang 2023. All Right Reserved.
+
+#ifndef __IPDF_STREAM_FILE_STREAM_HH
+#define __IPDF_STREAM_FILE_STREAM_HH
 
 #include "IoStream.hh"
+
+#include <algorithm>
 
 namespace ipdf::stream
 {
@@ -81,28 +87,46 @@ public:
         *current_++ = c;
     }
 
+    void write(Ch* src, size_t n) override
+    {
+        if (src == nullptr) return;
+
+        auto avail = static_cast<size_t>(bufferEnd_ - current_);
+
+        while (n > avail)
+        {
+            std::copy(current_, current_ + avail, src);
+
+            flush();
+            n     -= avail;
+            src   += avail;
+            avail = static_cast<size_t>(bufferEnd_ - current_);
+        }
+
+        if (n > 0) std::copy(current_, current_ + n, src);
+    }
+
     void puts(Ch c, size_t n) override
     {
         auto avail = static_cast<size_t>(bufferEnd_ - current_);
 
         while (n > avail)
         {
-            for (size_t i = 0; i < avail; i++) *current_++ = c;
+            std::fill_n(current_, avail, c);
 
             flush();
             n     -= avail;
             avail = static_cast<size_t>(bufferEnd_ - current_);
         }
 
-        if (n > 0)
-        {
-            for (size_t i = 0; i < n; i++) *current_++ = c;
-        }
+        if (n > 0) std::fill_n(current_, n, c);
     }
 };
 
 using FileReadStream  = InputStream<std::FILE*>;
 using FileWriteStream = OutputStream<std::FILE*>;
 } // namespace ipdf::stream
+
+#endif // __IPDF_STREAM_FILE_STREAM_HH
 
 // EOF
