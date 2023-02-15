@@ -6,7 +6,7 @@
 #ifndef __IPDF_STREAM_IO_STREAM_HH
 #define __IPDF_STREAM_IO_STREAM_HH
 
-#include "Concepts.hh"
+#include "Wrapper.hh"
 
 namespace ipdf::stream
 {
@@ -24,7 +24,7 @@ public:
         this->read();
     }
 
-private:
+protected:
     void read() override
     {
         if (this->current_ < this->bufferLast_)
@@ -74,11 +74,6 @@ public:
         for (size_t i = 0; i < n; i++) put(c);
     }
 };
-
-// using FileReadStream2 = InputStream<std::FILE*>;
-
-// auto x = FileReadStream2(nullptr, nullptr, 0);
-
 } // namespace ipdf::stream
 
 #endif // __IPDF_STREAM_IO_STREAM_HH

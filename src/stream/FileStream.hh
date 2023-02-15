@@ -22,7 +22,7 @@ public:
 
     ~InputStream() = default;
 
-private:
+protected:
     void read() override
     {
         if (current_ < bufferLast_)

@@ -86,11 +86,12 @@ public:
 
     BasicInputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
         : stream_(stream)
-        , buffer_(buffer)
         , bufferSize_(bufferSize)
-        , current_(buffer_)
         , count_(0)
         , readCount_(0)
+        , buffer_(buffer)
+        , bufferLast_(nullptr)
+        , current_(buffer_)
         , eof_(false)
     {
         IPDF_ASSERT(bufferSize_ >= 4); // for peek4(), used to unicode checking.
@@ -133,8 +134,8 @@ public:
     BasicOutputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
         : stream_(stream)
         , buffer_(buffer)
-        , current_(buffer_)
         , bufferEnd_(buffer_ + bufferSize)
+        , current_(buffer_)
     {
     }
 
@@ -152,6 +153,24 @@ protected:
     Ch*        buffer_;
     Ch*        bufferEnd_;
     Ch*        current_;
+};
+
+template <typename _StreamT, typename _Traits = RawStreamTraits<_StreamT>>
+class BasicIoStreamWrapper : virtual public BasicInputStreamWrapper<_StreamT>,
+                             virtual public BasicOutputStreamWrapper<_StreamT>
+{
+public:
+    using StreamType = typename _Traits::StreamType;
+    using Ch         = typename _Traits::Ch;
+
+    BasicIoStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
+        : BasicInputStreamWrapper<_StreamT>(stream, buffer, bufferSize)
+        , BasicOutputStreamWrapper<_StreamT>(stream, buffer, bufferSize)
+    {
+    }
+
+    BasicIoStreamWrapper()  = delete;
+    ~BasicIoStreamWrapper() = default;
 };
 
 // check for raw streams
