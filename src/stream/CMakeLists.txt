@@ -2,13 +2,13 @@
 # with experimental Unicode support, low priority.
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-add_library(stream STATIC)
+add_library(stream INTERFACE)
 
-target_sources(
-    stream
-    PRIVATE
-        FileStream.cc
-)
+# target_sources(
+#     stream
+#     PRIVATE
+#         FileStream.cc
+# )
 
 target_include_directories(
     stream
@@ -18,7 +18,7 @@ target_include_directories(
 
 target_link_libraries(
     stream
-    PRIVATE
+    INTERFACE
         utility
 )
 
