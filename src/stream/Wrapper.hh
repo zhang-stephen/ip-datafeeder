@@ -1,8 +1,7 @@
 // the concepts definitions for stream I/O Wrapper
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_STREAM_CONCEPTS_HH
-#define __IPDF_STREAM_CONCEPTS_HH
+#pragma once
 
 #include "Tools.hh"
 
@@ -44,15 +43,15 @@ struct RawStreamTraits<int>
 // clang-format off
 namespace
 {
-template <typename _StreamT>
-concept FilePointerType = std::same_as<_StreamT, std::FILE*>;
+template <typename StreamT>
+concept FilePointerType = std::same_as<StreamT, std::FILE*>;
 
-template <typename _StreamT>
-concept DerivedFromStdInputStream = std::derived_from<_StreamT, std::basic_istream<RawStreamCharType<_StreamT>>>;
+template <typename StreamT>
+concept DerivedFromStdInputStream = std::derived_from<StreamT, std::basic_istream<RawStreamCharType<StreamT>>>;
 
-template <typename _StreamT>
-concept DerivedFromStdOutputStream = std::derived_from<_StreamT, std::basic_ostream<RawStreamCharType<_StreamT>>>;
-}
+template <typename StreamT>
+concept DerivedFromStdOutputStream = std::derived_from<StreamT, std::basic_ostream<RawStreamCharType<StreamT>>>;
+} // namespace
 
 // template <typename _StreamT>
 // concept StreamWrapperConcept = requires(_StreamT s) {
@@ -67,22 +66,22 @@ concept DerivedFromStdOutputStream = std::derived_from<_StreamT, std::basic_ostr
 //     { std::invocable<decltype(&_StreamT::puts), _StreamT&, typename _StreamT::Ch, size_t> };
 // };
 
-template <typename _StreamT>
-concept RawInputStream = FilePointerType<_StreamT> || DerivedFromStdInputStream<_StreamT>;
+template <typename StreamT>
+concept RawInputStream = FilePointerType<StreamT> || DerivedFromStdInputStream<StreamT>;
 
-template <typename _StreamT>
-concept RawOutputStream = FilePointerType<_StreamT> || DerivedFromStdOutputStream<_StreamT>;
+template <typename StreamT>
+concept RawOutputStream = FilePointerType<StreamT> || DerivedFromStdOutputStream<StreamT>;
 
-template<typename _StreamT>
-concept RawIoStream = RawInputStream<_StreamT> && RawOutputStream<_StreamT>;
+template<typename StreamT>
+concept RawIoStream = RawInputStream<StreamT> && RawOutputStream<StreamT>;
 // clang-format on
 
-template <typename _RawStreamT, typename _Traits = RawStreamTraits<_RawStreamT>>
+template <typename RawStreamT, typename Traits = RawStreamTraits<RawStreamT>>
 class BasicInputStreamWrapper
 {
 public:
-    using StreamType = typename _Traits::StreamType;
-    using Ch         = typename _Traits::Ch;
+    using StreamType = typename Traits::StreamType;
+    using Ch         = typename Traits::Ch;
 
     BasicInputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
         : stream_(stream)
@@ -124,12 +123,12 @@ protected:
     bool       eof_;
 };
 
-template <typename _StreamT, typename _Traits = RawStreamTraits<_StreamT>>
+template <typename StreamT, typename Traits = RawStreamTraits<StreamT>>
 class BasicOutputStreamWrapper
 {
 public:
-    using StreamType = typename _Traits::StreamType;
-    using Ch         = typename _Traits::Ch;
+    using StreamType = typename Traits::StreamType;
+    using Ch         = typename Traits::Ch;
 
     BasicOutputStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
         : stream_(stream)
@@ -156,17 +155,17 @@ protected:
     Ch*        current_;
 };
 
-template <typename _StreamT, typename _Traits = RawStreamTraits<_StreamT>>
-class BasicIoStreamWrapper : virtual public BasicInputStreamWrapper<_StreamT>,
-                             virtual public BasicOutputStreamWrapper<_StreamT>
+template <typename StreamT, typename Traits = RawStreamTraits<StreamT>>
+class BasicIoStreamWrapper : virtual public BasicInputStreamWrapper<StreamT>,
+                             virtual public BasicOutputStreamWrapper<StreamT>
 {
 public:
-    using StreamType = typename _Traits::StreamType;
-    using Ch         = typename _Traits::Ch;
+    using StreamType = typename Traits::StreamType;
+    using Ch         = typename Traits::Ch;
 
     BasicIoStreamWrapper(StreamType stream, Ch* buffer, size_t bufferSize)
-        : BasicInputStreamWrapper<_StreamT>(stream, buffer, bufferSize)
-        , BasicOutputStreamWrapper<_StreamT>(stream, buffer, bufferSize)
+        : BasicInputStreamWrapper<StreamT>(stream, buffer, bufferSize)
+        , BasicOutputStreamWrapper<StreamT>(stream, buffer, bufferSize)
     {
     }
 
@@ -194,7 +193,5 @@ static_assert(RawIoStream<std::wfstream>);
 static_assert(RawIoStream<std::stringstream>);
 static_assert(RawIoStream<std::wstringstream>);
 } // namespace ipdf::stream
-
-#endif // __IPDF_STREAM_CONCEPTS_HH
 
 // EOF

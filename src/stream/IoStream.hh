@@ -3,22 +3,21 @@
 //      - ostream, ofstream, wostream, wofstream
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_STREAM_IO_STREAM_HH
-#define __IPDF_STREAM_IO_STREAM_HH
+#pragma once
 
 #include "Wrapper.hh"
 
 namespace ipdf::stream
 {
-template <RawInputStream _StreamT = std::istream>
-class InputStream : public BasicInputStreamWrapper<_StreamT>
+template <RawInputStream StreamT = std::istream>
+class InputStream : public BasicInputStreamWrapper<StreamT>
 {
 public:
-    using StreamType = typename BasicInputStreamWrapper<_StreamT>::StreamType;
-    using Ch         = typename BasicInputStreamWrapper<_StreamT>::Ch;
+    using StreamType = typename BasicInputStreamWrapper<StreamT>::StreamType;
+    using Ch         = typename BasicInputStreamWrapper<StreamT>::Ch;
 
     InputStream(StreamType is, Ch* buffer, size_t bufferSize)
-        : BasicInputStreamWrapper<_StreamT>(is, buffer, bufferSize)
+        : BasicInputStreamWrapper<StreamT>(is, buffer, bufferSize)
     {
         // NOTE: https://isocpp.org/wiki/faq/templates#nondependent-name-lookup-types
         this->read();
@@ -51,15 +50,15 @@ protected:
     }
 };
 
-template <RawOutputStream _StreamT = std::ostream>
-class OutputStream : public BasicOutputStreamWrapper<_StreamT>
+template <RawOutputStream StreamT = std::ostream>
+class OutputStream : public BasicOutputStreamWrapper<StreamT>
 {
 public:
-    using StreamType = typename BasicOutputStreamWrapper<_StreamT>::StreamType;
-    using Ch         = typename BasicOutputStreamWrapper<_StreamT>::Ch;
+    using StreamType = typename BasicOutputStreamWrapper<StreamT>::StreamType;
+    using Ch         = typename BasicOutputStreamWrapper<StreamT>::Ch;
 
     OutputStream(StreamType os)
-        : BasicOutputStreamWrapper<_StreamT>(os, nullptr, 0)
+        : BasicOutputStreamWrapper<StreamT>(os, nullptr, 0)
     {
     }
 
@@ -80,7 +79,5 @@ public:
     }
 };
 } // namespace ipdf::stream
-
-#endif // __IPDF_STREAM_IO_STREAM_HH
 
 // EOF

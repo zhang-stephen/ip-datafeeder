@@ -2,8 +2,7 @@
 // definitions of token in json string
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_JSON_TOKEN_HH
-#define __IPDF_JSON_TOKEN_HH
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -76,7 +75,5 @@ private:
     TokenType   type_;
 };
 } // namespace ipdf::json
-
-#endif // __IPDF_JSON_TOKEN_HH
 
 // EOF

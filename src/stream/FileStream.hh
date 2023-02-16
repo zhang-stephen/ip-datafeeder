@@ -1,8 +1,7 @@
 // File R/W operations with stream-like styles
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_STREAM_FILE_STREAM_HH
-#define __IPDF_STREAM_FILE_STREAM_HH
+#pragma once
 
 #include "IoStream.hh"
 
@@ -23,10 +22,10 @@ public:
         IPDF_ASSERT(stream_ != nullptr);
         IPDF_ASSERT(buffer_ != nullptr);
         IPDF_ASSERT(bufferSize_ >= 4); // for peek4(), used to unicode checking.
-        read();
+        this->read();
     }
 
-    ~InputStream() = default;
+    virtual ~InputStream() = default;
 
 protected:
     void read() override
@@ -126,7 +125,5 @@ public:
 using FileReadStream  = InputStream<std::FILE*>;
 using FileWriteStream = OutputStream<std::FILE*>;
 } // namespace ipdf::stream
-
-#endif // __IPDF_STREAM_FILE_STREAM_HH
 
 // EOF

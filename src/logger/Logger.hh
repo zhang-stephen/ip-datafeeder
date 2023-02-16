@@ -2,8 +2,7 @@
 // A wrapper of https://github.com/gabime/spdlog, branch v1.x
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_LOGGER_HH
-#define __IPDF_LOGGER_HH
+#pragma once
 
 #include <memory>
 #include <spdlog/spdlog.h>
@@ -22,7 +21,5 @@ void setupSpdLog();
 #define IPDF_LOG_WRN(...) SPDLOG_LOGGER_WARN(ipdf::logger::g_ipdfLogger, __VA_ARGS__)
 #define IPDF_LOG_ERR(...) SPDLOG_LOGGER_ERROR(ipdf::logger::g_ipdfLogger, __VA_ARGS__)
 #define IPDF_LOG_CRI(...) SPDLOG_LOGGER_CRITICAL(ipdf::logger::g_ipdfLogger, __VA_ARGS__)
-
-#endif // __IPDF_LOGGER_HH
 
 // EOF

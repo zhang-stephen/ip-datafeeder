@@ -1,8 +1,7 @@
 // Platform-dependent utilities
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_UTILITY_PLATFORM_HH
-#define __IPDF_UTILITY_PLATFORM_HH
+#pragma once
 
 #include "Defs.hh"
 
@@ -42,7 +41,5 @@ inline constexpr bool isWin32() { return isWin32Msvc() || isWin32Msys(); }
 inline constexpr bool isArm64() { return architecture() == TargetArch::ARM64; }
 inline constexpr bool isAmd64() { return architecture() == TargetArch::AMD64; }
 } // namespace ipdf::utility
-
-#endif // __IPDF_UTILITY_PLATFORM_HH
 
 // EOF

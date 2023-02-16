@@ -3,8 +3,7 @@
 // vscode-style json(with comment) is preferred
 // Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-#ifndef __IPDF_JSON_SERIALIZER_HH
-#define __IPDF_JSON_SERIALIZER_HH
+#pragma once
 
 #include "Singleton.hh"
 #include "Token.hh"
@@ -63,7 +62,5 @@ private:
     size_t             column_;
 };
 } // namespace ipdf::json
-
-#endif // __IPDF_JSON_SERIALIZER_HH
 
 // EOF
