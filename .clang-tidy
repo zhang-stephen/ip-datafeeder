@@ -1,5 +1,5 @@
 ---
-# >- means
+# >- means following string
 Checks: >-
   -*,
   bugprone-assignment-in-if-condition,
@@ -57,6 +57,15 @@ Checks: >-
   bugprone-use-after-move,
   bugprone-virtual-near-miss,
   readability-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  modernize-*,
+  -modernize-avoid-c-arrays,
+  -modernize-use-trailing-return-type,
+  misc-*,
+  performance-*
 WarningsAsErrors: false
 FormatStyle: file
 User: developer
@@ -79,9 +88,15 @@ CheckOptions:
       value: CamelCase
     - key: readability-identifier-naming.ClassConstantCase
       value: camelBack
+    - key: readability-identifier-naming.ClassConstantPrefix
+      value: ''
+    - key: readability-identifier-naming.ClassConstantSuffix
+      value: '_'
     - key: readability-identifier-naming.ConstantCase
       value: UPPER_CASE
     - key: readability-identifier-naming.EnumCase
+      value: CamelCase
+    - key: readability-identifier-naming.EnumConstantCase
       value: CamelCase
     - key: readability-identifier-naming.FunctionCase
       value: camelBack
@@ -93,6 +108,8 @@ CheckOptions:
       value: camelBack
     - key: readability-identifier-naming.GlobalVariablePrefix
       value: 'g_'
+    - key: readability-identifier-naming.LocalConstantCase
+      value: camelBack
     - key: readability-identifier-naming.LocalVariableCase
       value: camelBack
     - key: readability-identifier-naming.MacroDefinitionCase
@@ -107,6 +124,10 @@ CheckOptions:
       value: lower_case
     - key: readability-identifier-naming.ParameterCase
       value: camelBack
+    - key: readability-identifier-naming.StaticConstantPrefix
+      value: ''
+    - key: readability-identifier-naming.StaticVariableCase
+      value: camelBack
     - key: readability-identifier-naming.StructCase
       value: CamelCase
     - key: readability-identifier-naming.TemplateParameterCase
@@ -120,4 +141,12 @@ CheckOptions:
     - key: readability-identifier-naming.VariableCase
       value: camelBack
     - key: readability-uniqueptr-delete-release.PreferResetCall
+      value: true
+    # - key: cppcoreguidelines-avoid-do-while.IgnoreMacros # TODO: invalid in LLVM 15
+    #   value: true
+    - key: cppcoreguidelines-macro-usage.AllowedRegexp
+      value: ^IPDF_(LOG|ASSERT)*
+    - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+      value: true
+    - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctionsWhenCopyIsDeleted
       value: true

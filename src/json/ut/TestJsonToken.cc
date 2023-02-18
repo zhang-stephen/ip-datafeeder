@@ -17,7 +17,7 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 
-    inline static std::vector<Token> rights_ = {
+    inline static const std::vector<Token> rights_ = {
         Token("null", 1, 0, TokenType::Null),     Token("123", 2, 0, TokenType::Integer),
         Token("1.0", 3, 17, TokenType::Float),    Token("true", 4, 12, TokenType::Boolean),
         Token("string", 4, 2, TokenType::String), Token("[", 5, 0, TokenType::BracketL),
@@ -26,7 +26,7 @@ public:
         Token("\"", 7, 39, TokenType::Quotation), Token(":", 8, 22, TokenType::Colon),
     };
 
-    inline static std::vector<Token> mistakes_ = {
+    inline static const std::vector<Token> mistakes_ = {
         Token("string", 0, 1, TokenType::String), // line number should be greater than zero
     };
 
@@ -41,7 +41,7 @@ TEST_F(JsonTokenTest, Tokens)
 
     for (size_t i = 0; i < rights_.size(); i++)
     {
-        auto& token = rights_.at(i).token();
+        const auto& token = rights_.at(i).token();
         EXPECT_STREQ(tokenStrings[i].c_str(), token.c_str());
     }
 }

@@ -9,7 +9,7 @@
 
 namespace ipdf::json
 {
-Serializer::Serializer()
+Serializer::Serializer() : line_(1), column_(0)
 {
     reset();
 }
@@ -31,7 +31,7 @@ bool Serializer::tokenize(const std::string& str)
 {
     if (str.length() == 0) return false;
 
-    std::string strTmpBuff           = "";
+    std::string strTmpBuff;
     bool        shouldJumpToNextLine = false;
 
     // NOTE: line break should be LF, CRLF and CR are not supported

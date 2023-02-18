@@ -15,13 +15,12 @@ public:
         return instance;
     }
 
+    Singleton(const Singleton&)            = delete;
+    Singleton& operator=(const Singleton&) = delete;
+
 protected:
     Singleton()          = default;
     virtual ~Singleton() = default;
-
-private:
-    Singleton(const Singleton&)            = delete;
-    Singleton& operator=(const Singleton&) = delete;
 };
 } // namespace ipdf::utility
 

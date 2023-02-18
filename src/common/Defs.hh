@@ -10,10 +10,10 @@ namespace ipdf
 // platform definitions
 enum class TargetPlatform : uint8_t
 {
-    WIN32_MSVC,
-    WIN32_MSYS,
-    LINUX,
-    APPLE,
+    Win32VisualCpp,
+    Win32Mingw,
+    Linux,
+    Apple,
     UNKNOWN,
 };
 

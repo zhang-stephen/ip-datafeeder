@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <tuple>
+#include <utility>
 
 namespace ipdf::json
 {
@@ -34,7 +35,7 @@ public:
     constexpr Token(std::string token, size_t line, size_t column, TokenType type)
         : line_(line)
         , column_(column)
-        , token_(token)
+        , token_(std::move(token))
         , type_(type)
     {
     }

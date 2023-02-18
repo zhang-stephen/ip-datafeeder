@@ -18,7 +18,7 @@ class Serializer : public utility::Singleton<Serializer>
 {
 public:
     Serializer();
-    ~Serializer() = default;
+    ~Serializer() override = default;
 
     void reset();
     auto getTokens() const noexcept -> const std::vector<Token>&;

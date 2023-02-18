@@ -10,14 +10,14 @@ namespace ipdf::utility
 inline constexpr TargetPlatform platform()
 {
 #ifdef __APPLE__
-    return TargetPlatform::APPLE;
+    return TargetPlatform::Apple;
 #elif defined(__LINUX__)
-    return TargetPlatform::LINUX;
+    return TargetPlatform::Linux;
 #elif defined(__WIN32__)
 #ifdef __MSVC__
-    return TargetPlatform::WIN32_MSVC;
+    return TargetPlatform::Win32VisualCpp;
 #else // FIXME: To be confirmed the name of the macro of MSYS2.
-    return TargetPlatform::WIN32_MSYS;
+    return TargetPlatform::Win32Mingw;
 #endif // __MSVC__
 #else
 #error "Unknown Platform to Build!"
@@ -33,13 +33,15 @@ inline constexpr TargetArch architecture()
 #endif // __aarch64__
 }
 
-inline constexpr bool isWin32Msvc() { return platform() == TargetPlatform::WIN32_MSVC; }
-inline constexpr bool isWin32Msys() { return platform() == TargetPlatform::WIN32_MSYS; }
-inline constexpr bool isMacOs() { return platform() == TargetPlatform::APPLE; }
-inline constexpr bool isLinux() { return platform() == TargetPlatform::LINUX; }
+// clang-format off
+inline constexpr bool isWin32Msvc() { return platform() == TargetPlatform::Win32VisualCpp; }
+inline constexpr bool isWin32Msys() { return platform() == TargetPlatform::Win32Mingw; }
+inline constexpr bool isMacOs() { return platform() == TargetPlatform::Apple; }
+inline constexpr bool isLinux() { return platform() == TargetPlatform::Linux; }
 inline constexpr bool isWin32() { return isWin32Msvc() || isWin32Msys(); }
 inline constexpr bool isArm64() { return architecture() == TargetArch::ARM64; }
 inline constexpr bool isAmd64() { return architecture() == TargetArch::AMD64; }
+// clang-format on
 } // namespace ipdf::utility
 
 // EOF
