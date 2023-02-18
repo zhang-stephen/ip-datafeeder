@@ -60,11 +60,14 @@ Checks: >-
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-non-const-global-variables,
   -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   modernize-*,
   -modernize-avoid-c-arrays,
   -modernize-use-trailing-return-type,
   misc-*,
+  -misc-non-private-member-variables-in-classes,
   performance-*
 WarningsAsErrors: false
 FormatStyle: file

@@ -97,8 +97,8 @@ public:
         IPDF_ASSERT(buffer_ != nullptr);
     }
 
-    BasicInputStreamWrapper()  = delete;
-    ~BasicInputStreamWrapper() = default;
+    BasicInputStreamWrapper()          = delete;
+    virtual ~BasicInputStreamWrapper() = default;
 
     const Ch* peek4() { return (current_ + 4 - !eof_ <= bufferLast_) ? current_ : nullptr; }
     Ch        peek() { return *current_; }
@@ -138,9 +138,7 @@ public:
     {
     }
 
-    BasicOutputStreamWrapper() = delete;
-    // BasicOutputStreamWrapper(const BasicOutputStreamWrapper&) = delete;
-    // BasicOutputStreamWrapper(BasicOutputStreamWrapper&&)      = delete;
+    BasicOutputStreamWrapper()          = delete;
     virtual ~BasicOutputStreamWrapper() = default;
 
     virtual void put(Ch)            = 0;
@@ -169,8 +167,8 @@ public:
     {
     }
 
-    BasicIoStreamWrapper()  = delete;
-    ~BasicIoStreamWrapper() = default;
+    BasicIoStreamWrapper()          = delete;
+    virtual ~BasicIoStreamWrapper() = default;
 };
 
 // check for raw streams

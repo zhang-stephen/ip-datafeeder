@@ -25,7 +25,7 @@ public:
         this->read();
     }
 
-    virtual ~InputStream() = default;
+     ~InputStream() override = default;
 
 protected:
     void read() override
@@ -66,7 +66,7 @@ public:
         IPDF_ASSERT(bufferSize > 0);
     }
 
-    ~OutputStream() = default;
+    ~OutputStream() override = default;
 
     bool flush() override
     {
