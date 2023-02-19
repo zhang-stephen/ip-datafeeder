@@ -1,7 +1,7 @@
-# GTest for ipdf::json
+# GTest for ipdf::stream
 # Copyright (c) Stephen Zhang 2023. All Right Reserved.
 
-set(UT_MODULE_NAME ${IPDF_UT_PREFIX}_json)
+set(UT_MODULE_NAME  ${IPDF_UT_PREFIX}_stream)
 
 message(STATUS "creating ut -> ${UT_MODULE_NAME}")
 
@@ -10,14 +10,14 @@ add_executable(${UT_MODULE_NAME})
 target_sources(
     ${UT_MODULE_NAME}
     PRIVATE
-        TestJsonSerializer.cc
-        TestJsonToken.cc
+        TestFileReadStream.cc
 )
 
 target_link_libraries(
     ${UT_MODULE_NAME}
     PRIVATE
-        json
+        logger
+        stream
         ipdf_ut_entry
 )
 

@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)                      # C++20/C17(if needed)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED true)
+set(IPDF_UT_PREFIX ipdf_ut)
 
 # variables
 # NOTE: variables with lower-case are private.
@@ -22,6 +23,12 @@ target_compile_options(
         # BUILD_INTERFACE: options effective for this repo only.
         "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
+)
+
+target_include_directories(
+    compiler
+    INTERFACE
+        ${CMAKE_BINARY_DIR}
 )
 
 # platform

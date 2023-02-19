@@ -24,6 +24,8 @@ find_package(spdlog 1.11.0 CONFIG REQUIRED)
 find_package(fmt 9.1.0 CONFIG REQUIRED)
 find_package(GTest 1.12.0 CONFIG REQUIRED)
 
+configure_file(src/Config.hh.in ${CMAKE_BINARY_DIR}/Config.hh)
+
 add_subdirectory(src)  # source files
 add_subdirectory(test) # UT/MT/Others
 

@@ -24,6 +24,7 @@ target_link_libraries(
         common
         json
         logger
+        stream
         utility
 )
 

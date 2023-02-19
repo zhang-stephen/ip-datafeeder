@@ -22,4 +22,6 @@ target_link_libraries(
         utility
 )
 
+add_subdirectory(ut)
+
 # EOF

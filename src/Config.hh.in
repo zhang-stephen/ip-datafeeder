@@ -1,0 +1,6 @@
+// configuration of ip-datafeeder, pre-processed by cmake
+// Copyright (c) Stephen Zhang 2023. All Right Reserved.
+
+#cmakedefine CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}"
+
+// EOF
