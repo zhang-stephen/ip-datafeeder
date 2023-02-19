@@ -42,7 +42,6 @@ public:
             std::fread(rawContents_.data(), sizeof(char), generatedFileSize_, fp_);
             resetFp();
         }
-
     }
 
     void TearDown() override { std::fclose(fp_); }
@@ -87,16 +86,40 @@ private:
     }
 };
 
-TEST_F(FileReadStreamTest, Take)
+TEST_F(FileReadStreamTest, TakeAndTell)
 {
     char buffer[4];
     auto fws = stream::FileReadStream(fp_, buffer, 4);
 
     for (size_t i = 0; i < generatedFileSize_; i++)
     {
-        IPDF_LOG_INF("Index = {}, Cached = {}", i, uint8_t(buffer[i % 4]));
+        IPDF_LOG_TRC("Index = {}, Cached = {}", i, uint8_t(buffer[i % 4]));
         EXPECT_EQ(fws.take(), rawContents_.at(i));
+        EXPECT_EQ(fws.tell(), i + 1);
     }
 }
 
+TEST_F(FileReadStreamTest, Peek)
+{
+    static constexpr size_t bufferSize = 12;
+
+    char buffer[bufferSize];
+    auto fws = stream::FileReadStream(fp_, buffer, bufferSize);
+
+    EXPECT_EQ(fws.peek(), rawContents_[0]);
+}
+
+TEST_F(FileReadStreamTest, Peek4)
+{
+    static constexpr size_t bufferSize { 128 };
+
+    char        buffer[bufferSize] { 0 };
+    auto        fws     = stream::FileReadStream(fp_, buffer, bufferSize);
+    const auto* current = fws.peek4();
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        EXPECT_EQ(current[i], rawContents_.at(i));
+    }
+}
 } // namespace ipdf::test
