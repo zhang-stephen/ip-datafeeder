@@ -17,6 +17,7 @@ project(
 # includes
 include(cmake/options.cmake)
 include(cmake/common.cmake)
+include(cmake/commands.cmake)
 include(CTest)
 
 # find_package(PkgConfig REQUIRED)
