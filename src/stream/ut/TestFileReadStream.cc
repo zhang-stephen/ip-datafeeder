@@ -4,6 +4,7 @@
 #include "Config.hh"
 #include "FileStream.hh"
 #include "Logger.hh"
+#include "Platform.hh"
 
 #include <algorithm>
 #include <array>
@@ -22,22 +23,22 @@ class FileReadStreamTest : public ::testing::Test
 public:
     void SetUp() override
     {
-        auto        rd               = std::random_device();
-        auto        seed             = std::mt19937(rd());
-        auto        generator        = std::uniform_int_distribution<>(0, std::numeric_limits<char>::max());
-        std::string generatedFileDir = CMAKE_BINARY_DIR;
-        fs::path    generatedFile    = generatedFileDir + "/src/stream/TestFileReadStream.bin";
+        auto     rd               = std::random_device();
+        auto     seed             = std::mt19937(rd());
+        auto     generator        = std::uniform_int_distribution<>(0, std::numeric_limits<char>::max());
+        fs::path generatedFileDir = CMAKE_BINARY_DIR;
+        fs::path generatedFile    = generatedFileDir / "src/stream/TestFileReadStream.bin";
 
         if (!fs::exists(generatedFile))
         {
             std::generate(rawContents_.begin(), rawContents_.end(), [&] { return generator(seed); });
             ASSERT_TRUE(createRandomFile(generatedFile));
-            fp_ = std::fopen(generatedFile.c_str(), "r");
+            fp_ = std::fopen(generatedFile.string().c_str(), readFlags().c_str());
             ASSERT_NE(fp_, nullptr);
         }
         else
         {
-            fp_ = std::fopen(generatedFile.c_str(), "r");
+            fp_ = std::fopen(generatedFile.string().c_str(), readFlags().c_str());
             ASSERT_NE(fp_, nullptr);
             std::fread(rawContents_.data(), sizeof(char), generatedFileSize_, fp_);
             resetFp();
@@ -55,7 +56,7 @@ private:
     {
         if (p.empty()) return false;
 
-        auto* tmpFp = std::fopen(p.c_str(), "w");
+        auto* tmpFp = std::fopen(p.string().c_str(), writeFlags().c_str());
 
         if (tmpFp == nullptr)
         {
@@ -84,11 +85,14 @@ private:
             IPDF_LOG_WRN("Reset the file pointer failed!");
         }
     }
+
+    static std::string writeFlags() { return utility::isWin32() ? "wb" : "w"; }
+    static std::string readFlags() { return utility::isWin32() ? "rb" : "r"; }
 };
 
 TEST_F(FileReadStreamTest, TakeAndTell)
 {
-    char buffer[4];
+    char buffer[4] { 0 };
     auto fws = stream::FileReadStream(fp_, buffer, 4);
 
     for (size_t i = 0; i < generatedFileSize_; i++)
@@ -103,7 +107,7 @@ TEST_F(FileReadStreamTest, Peek)
 {
     static constexpr size_t bufferSize = 12;
 
-    char buffer[bufferSize];
+    char buffer[bufferSize] { 0 };
     auto fws = stream::FileReadStream(fp_, buffer, bufferSize);
 
     EXPECT_EQ(fws.peek(), rawContents_[0]);

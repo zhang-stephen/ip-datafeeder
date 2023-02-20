@@ -13,12 +13,12 @@ inline constexpr TargetPlatform platform()
     return TargetPlatform::Apple;
 #elif defined(__LINUX__)
     return TargetPlatform::Linux;
-#elif defined(__WIN32__)
-#ifdef __MSVC__
+#elif defined(_WIN32) || defined(_WIN64)
+#ifdef _MSC_VER
     return TargetPlatform::Win32VisualCpp;
 #else // FIXME: To be confirmed the name of the macro of MSYS2.
     return TargetPlatform::Win32Mingw;
-#endif // __MSVC__
+#endif // _MSC_VER
 #else
 #error "Unknown Platform to Build!"
 #endif // __APPLE__, __LINUX__, __WIN32__
@@ -28,6 +28,8 @@ inline constexpr TargetArch architecture()
 {
 #ifdef __aarch64__
     return TargetArch::ARM64;
+#elif defined(__amd64) || defined(_M_AMD64)
+    return TargetArch::AMD64;
 #else
 #error "Unknown Architecture to Build"
 #endif // __aarch64__
