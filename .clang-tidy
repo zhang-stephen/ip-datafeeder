@@ -71,6 +71,7 @@ Checks: >-
   -modernize-use-trailing-return-type,
   misc-*,
   -misc-non-private-member-variables-in-classes,
+  -misc-static-assert,
   performance-*
 WarningsAsErrors: false
 FormatStyle: file

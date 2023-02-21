@@ -8,6 +8,9 @@ ipdf_create_ut(
         ipdf_ut_entry
     SOURCES
         TestFileReadStream.cc
+        TestIoStream.cc
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # EOF
