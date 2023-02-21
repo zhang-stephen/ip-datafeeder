@@ -5,6 +5,7 @@
 #include "FileStream.hh"
 #include "Logger.hh"
 #include "Platform.hh"
+#include "TestStreamUtils.hh"
 
 #include <algorithm>
 #include <array>
@@ -23,15 +24,12 @@ class FileReadStreamTest : public ::testing::Test
 public:
     void SetUp() override
     {
-        auto     rd               = std::random_device();
-        auto     seed             = std::mt19937(rd());
-        auto     generator        = std::uniform_int_distribution<>(0, std::numeric_limits<char>::max());
         fs::path generatedFileDir = CMAKE_BINARY_DIR;
         fs::path generatedFile    = generatedFileDir / "src/stream/TestFileReadStream.bin";
 
         if (!fs::exists(generatedFile))
         {
-            std::generate(rawContents_.begin(), rawContents_.end(), [&] { return generator(seed); });
+            generateContents(rawContents_.begin(), rawContents_.end(), 0, std::numeric_limits<char>::max());
             ASSERT_TRUE(createRandomFile(generatedFile));
             fp_ = std::fopen(generatedFile.string().c_str(), readFlags().c_str());
             ASSERT_NE(fp_, nullptr);
@@ -86,8 +84,8 @@ private:
         }
     }
 
-    static std::string writeFlags() { return utility::isWin32() ? "wb" : "w"; }
-    static std::string readFlags() { return utility::isWin32() ? "rb" : "r"; }
+    static constexpr std::string writeFlags() { return utility::isWin32() ? "wb" : "w"; }
+    static constexpr std::string readFlags() { return utility::isWin32() ? "rb" : "r"; }
 };
 
 TEST_F(FileReadStreamTest, TakeAndTell)
