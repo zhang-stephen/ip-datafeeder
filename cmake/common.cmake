@@ -25,6 +25,12 @@ target_compile_options(
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 
+target_compile_definitions(
+    compiler
+    INTERFACE
+    "$<${msvc_cxx}:_CRT_SECURE_NO_WARNINGS>"
+)
+
 target_include_directories(
     compiler
     INTERFACE
