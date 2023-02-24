@@ -58,9 +58,9 @@ TEST_F(InputStreamTest, Peek4)
 {
     static constexpr size_t pBufferSize { 512 };
 
-    char  pBuffer[pBufferSize] { 0 };
-    auto  ssw     = ipdf::stream::InputStream(iss_, pBuffer, pBufferSize);
-    auto* current = ssw.peek4();
+    char        pBuffer[pBufferSize] { 0 };
+    auto        ssw     = ipdf::stream::InputStream(iss_, pBuffer, pBufferSize);
+    const auto* current = ssw.peek4();
 
     for (size_t i = 0; i < 4; i++) EXPECT_EQ(current[i], rawContents_[i]);
 }

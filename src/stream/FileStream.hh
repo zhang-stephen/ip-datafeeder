@@ -25,7 +25,7 @@ public:
         this->read();
     }
 
-     ~InputStream() override = default;
+    ~InputStream() override = default;
 
 protected:
     void read() override
