@@ -4,8 +4,6 @@
 add_subdirectory(common)
 add_subdirectory(json)
 add_subdirectory(logger)
-add_subdirectory(stream)
-add_subdirectory(utility)
 
 set(IPDF_EXECUTABLE_BIN ipdf)
 
@@ -24,8 +22,6 @@ target_link_libraries(
         common
         json
         logger
-        stream
-        utility
 )
 
 # EOF

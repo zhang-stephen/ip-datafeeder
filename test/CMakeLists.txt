@@ -19,7 +19,6 @@ target_link_libraries(
         compiler
         common
         logger
-        utility
         GTest::gtest
 )
 

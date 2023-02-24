@@ -3,10 +3,26 @@
 
 #pragma once
 
-#include "Defs.hh"
+#include <cstdint>
 
 namespace ipdf::utility
 {
+enum class TargetPlatform : uint8_t
+{
+    Win32VisualCpp,
+    Win32Mingw,
+    Linux,
+    Apple,
+    UNKNOWN,
+};
+
+enum class TargetArch : uint8_t
+{
+    AMD64,
+    ARM64,
+    UNKNOWN,
+};
+
 inline constexpr TargetPlatform platform()
 {
 #ifdef __APPLE__

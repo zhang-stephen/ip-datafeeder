@@ -4,12 +4,6 @@
 
 add_library(stream INTERFACE)
 
-# target_sources(
-#     stream
-#     PRIVATE
-#         FileStream.cc
-# )
-
 target_include_directories(
     stream
     INTERFACE
